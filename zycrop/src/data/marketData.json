@@ -1,0 +1,2798 @@
+{
+  "papaya": {
+    "crop": "Papaya",
+    "modal_price": 2992,
+    "min_price": 2000,
+    "max_price": 4000,
+    "markets_count": 24,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      },
+      {
+        "name": "Cheyyar(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvannamalai",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      },
+      {
+        "name": "Karimangalam(Uzhavar Sandhai)",
+        "district": "Dharmapuri",
+        "state": "Tamil Nadu",
+        "modal": 3400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "pomegranate": {
+    "crop": "Pomegranate",
+    "modal_price": 23125,
+    "min_price": 20000,
+    "max_price": 25000,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 24000
+      },
+      {
+        "name": "Vadavalli(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 24000
+      },
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 22500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "ginger(green)": {
+    "crop": "Ginger(Green)",
+    "modal_price": 7350,
+    "min_price": 5000,
+    "max_price": 9000,
+    "markets_count": 24,
+    "top_markets": [
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 8700
+      },
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 8400
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 8400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cauliflower": {
+    "crop": "Cauliflower",
+    "modal_price": 3181,
+    "min_price": 2000,
+    "max_price": 4500,
+    "markets_count": 18,
+    "top_markets": [
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "sweet potato": {
+    "crop": "Sweet Potato",
+    "modal_price": 3289,
+    "min_price": 2300,
+    "max_price": 5000,
+    "markets_count": 14,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Tiruchengode APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      },
+      {
+        "name": "Mecheri(Uzhavar Sandhai)",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "tinda": {
+    "crop": "Tinda",
+    "modal_price": 1450,
+    "min_price": 800,
+    "max_price": 2100,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Sriganganagar (F&V) APMC",
+        "district": "Ganganagar",
+        "state": "Rajasthan",
+        "modal": 1900
+      },
+      {
+        "name": "Narnaul APMC",
+        "district": "Mahendragarh-Narnaul",
+        "state": "Haryana",
+        "modal": 1000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "methi(leaves)": {
+    "crop": "Methi(Leaves)",
+    "modal_price": 1200,
+    "min_price": 600,
+    "max_price": 1600,
+    "markets_count": 6,
+    "top_markets": [
+      {
+        "name": "Morinda APMC",
+        "district": "Ropar (Rupnagar)",
+        "state": "Punjab",
+        "modal": 1500
+      },
+      {
+        "name": "Narnaul APMC",
+        "district": "Mahendragarh-Narnaul",
+        "state": "Haryana",
+        "modal": 1500
+      },
+      {
+        "name": "Sriganganagar (F&V) APMC",
+        "district": "Ganganagar",
+        "state": "Rajasthan",
+        "modal": 1400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "green chilli": {
+    "crop": "Green Chilli",
+    "modal_price": 4484,
+    "min_price": 3000,
+    "max_price": 6000,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Tiruvarur(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvarur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "french beans(frasbean)": {
+    "crop": "French Beans(Frasbean)",
+    "modal_price": 4650,
+    "min_price": 1800,
+    "max_price": 8000,
+    "markets_count": 6,
+    "top_markets": [
+      {
+        "name": "Morinda APMC",
+        "district": "Ropar (Rupnagar)",
+        "state": "Punjab",
+        "modal": 8000
+      },
+      {
+        "name": "Karsiyang(Matigara) APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 6000
+      },
+      {
+        "name": "North Paravur APMC",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "modal": 5500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "bitter gourd": {
+    "crop": "Bitter gourd",
+    "modal_price": 4117,
+    "min_price": 2000,
+    "max_price": 6000,
+    "markets_count": 30,
+    "top_markets": [
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "capsicum": {
+    "crop": "Capsicum",
+    "modal_price": 5756,
+    "min_price": 4200,
+    "max_price": 8000,
+    "markets_count": 9,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 8000
+      },
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 7000
+      },
+      {
+        "name": "Tindivanam APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 5800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "tomato": {
+    "crop": "Tomato",
+    "modal_price": 1429,
+    "min_price": 600,
+    "max_price": 2000,
+    "markets_count": 29,
+    "top_markets": [
+      {
+        "name": "Tiruvarur(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvarur",
+        "state": "Tamil Nadu",
+        "modal": 2000
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 1800
+      },
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 1800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "banana - green": {
+    "crop": "Banana - Green",
+    "modal_price": 3245,
+    "min_price": 1600,
+    "max_price": 5500,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5250
+      },
+      {
+        "name": "Tindivanam APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "carrot": {
+    "crop": "Carrot",
+    "modal_price": 4198,
+    "min_price": 2000,
+    "max_price": 6000,
+    "markets_count": 25,
+    "top_markets": [
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      },
+      {
+        "name": "Mecheri(Uzhavar Sandhai)",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 5250
+      },
+      {
+        "name": "Udumalpet APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5250
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "raddish": {
+    "crop": "Raddish",
+    "modal_price": 2297,
+    "min_price": 1000,
+    "max_price": 3600,
+    "markets_count": 29,
+    "top_markets": [
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 3350
+      },
+      {
+        "name": "Sundarapuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      },
+      {
+        "name": "Tiruvarur(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvarur",
+        "state": "Tamil Nadu",
+        "modal": 3000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "lemon": {
+    "crop": "Lemon",
+    "modal_price": 8816,
+    "min_price": 3000,
+    "max_price": 13000,
+    "markets_count": 25,
+    "top_markets": [
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 12750
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 12500
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 12500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "amla(nelli kai)": {
+    "crop": "Amla(Nelli Kai)",
+    "modal_price": 6850,
+    "min_price": 5000,
+    "max_price": 8000,
+    "markets_count": 15,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 8000
+      },
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 8000
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 7500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "onion green": {
+    "crop": "Onion Green",
+    "modal_price": 3291,
+    "min_price": 2200,
+    "max_price": 5000,
+    "markets_count": 28,
+    "top_markets": [
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Cheyyar(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvannamalai",
+        "state": "Tamil Nadu",
+        "modal": 4500
+      },
+      {
+        "name": "Perampet(Uzhavar Sandhai)",
+        "district": "Vellore",
+        "state": "Tamil Nadu",
+        "modal": 4300
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "onion": {
+    "crop": "Onion",
+    "modal_price": 2605,
+    "min_price": 1800,
+    "max_price": 4000,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Ponnamaravathi(Uzhavar Sandhai)",
+        "district": "Pudukkottai",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      },
+      {
+        "name": "Tiruvarur(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvarur",
+        "state": "Tamil Nadu",
+        "modal": 3600
+      },
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 3500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "amaranthus": {
+    "crop": "Amaranthus",
+    "modal_price": 2743,
+    "min_price": 1200,
+    "max_price": 5000,
+    "markets_count": 28,
+    "top_markets": [
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3800
+      },
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "drumstick": {
+    "crop": "Drumstick",
+    "modal_price": 6298,
+    "min_price": 3000,
+    "max_price": 10500,
+    "markets_count": 22,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 10500
+      },
+      {
+        "name": "Cheyyar(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvannamalai",
+        "state": "Tamil Nadu",
+        "modal": 9000
+      },
+      {
+        "name": "Ponnamaravathi(Uzhavar Sandhai)",
+        "district": "Pudukkottai",
+        "state": "Tamil Nadu",
+        "modal": 7750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "banana": {
+    "crop": "Banana",
+    "modal_price": 5003,
+    "min_price": 2000,
+    "max_price": 9000,
+    "markets_count": 29,
+    "top_markets": [
+      {
+        "name": "Sundarapuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 8500
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 7500
+      },
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 7500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "beans": {
+    "crop": "Beans",
+    "modal_price": 6046,
+    "min_price": 3500,
+    "max_price": 8000,
+    "markets_count": 25,
+    "top_markets": [
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 7500
+      },
+      {
+        "name": "Sundarapuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 7000
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 6750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "snakeguard": {
+    "crop": "Snakeguard",
+    "modal_price": 2820,
+    "min_price": 1200,
+    "max_price": 5000,
+    "markets_count": 28,
+    "top_markets": [
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 4700
+      },
+      {
+        "name": "Tiruchengode APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      },
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cucumbar(kheera)": {
+    "crop": "Cucumbar(Kheera)",
+    "modal_price": 4218,
+    "min_price": 2200,
+    "max_price": 8000,
+    "markets_count": 17,
+    "top_markets": [
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 7750
+      },
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 7600
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 7000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mint(pudina)": {
+    "crop": "Mint(Pudina)",
+    "modal_price": 3810,
+    "min_price": 2500,
+    "max_price": 6000,
+    "markets_count": 25,
+    "top_markets": [
+      {
+        "name": "Karimangalam(Uzhavar Sandhai)",
+        "district": "Dharmapuri",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5500
+      },
+      {
+        "name": "Ponnamaravathi(Uzhavar Sandhai)",
+        "district": "Pudukkottai",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "potato": {
+    "crop": "Potato",
+    "modal_price": 3478,
+    "min_price": 2000,
+    "max_price": 5000,
+    "markets_count": 25,
+    "top_markets": [
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 4500
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 4500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "brinjal": {
+    "crop": "Brinjal",
+    "modal_price": 3105,
+    "min_price": 1400,
+    "max_price": 5200,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Tiruchengode APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "coriander(leaves)": {
+    "crop": "Coriander(Leaves)",
+    "modal_price": 4654,
+    "min_price": 2000,
+    "max_price": 6500,
+    "markets_count": 27,
+    "top_markets": [
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Tiruchengode APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cluster beans": {
+    "crop": "Cluster beans",
+    "modal_price": 3950,
+    "min_price": 3000,
+    "max_price": 5000,
+    "markets_count": 26,
+    "top_markets": [
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 4800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "ridgeguard(tori)": {
+    "crop": "Ridgeguard(Tori)",
+    "modal_price": 4275,
+    "min_price": 2500,
+    "max_price": 7000,
+    "markets_count": 26,
+    "top_markets": [
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 6650
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "lime": {
+    "crop": "Lime",
+    "modal_price": 5361,
+    "min_price": 1500,
+    "max_price": 13000,
+    "markets_count": 9,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 11500
+      },
+      {
+        "name": "Singanallur(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 11500
+      },
+      {
+        "name": "Udumalpet APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 6750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "yam(ratalu)": {
+    "crop": "Yam(Ratalu)",
+    "modal_price": 4804,
+    "min_price": 2500,
+    "max_price": 6500,
+    "markets_count": 14,
+    "top_markets": [
+      {
+        "name": "Tiruchengode APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 6250
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "tapioca": {
+    "crop": "Tapioca",
+    "modal_price": 2503,
+    "min_price": 1500,
+    "max_price": 4000,
+    "markets_count": 15,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 2750
+      },
+      {
+        "name": "Sundarapuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 2750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "green avare(w)": {
+    "crop": "Green Avare(W)",
+    "modal_price": 4655,
+    "min_price": 2500,
+    "max_price": 9000,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 8000
+      },
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 6650
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 6500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "chow chow": {
+    "crop": "Chow Chow",
+    "modal_price": 2315,
+    "min_price": 1500,
+    "max_price": 3000,
+    "markets_count": 24,
+    "top_markets": [
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 3000
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 3000
+      },
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 2800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "garlic": {
+    "crop": "Garlic",
+    "modal_price": 14818,
+    "min_price": 10000,
+    "max_price": 19000,
+    "markets_count": 11,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 18000
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 17500
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 16500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "spinach": {
+    "crop": "Spinach",
+    "modal_price": 1475,
+    "min_price": 400,
+    "max_price": 3000,
+    "markets_count": 8,
+    "top_markets": [
+      {
+        "name": "SMY Baijnath",
+        "district": "Kangra",
+        "state": "Himachal Pradesh",
+        "modal": 2800
+      },
+      {
+        "name": "SMY Jaisinghpur",
+        "district": "Kangra",
+        "state": "Himachal Pradesh",
+        "modal": 2400
+      },
+      {
+        "name": "Morinda APMC",
+        "district": "Ropar (Rupnagar)",
+        "state": "Punjab",
+        "modal": 2000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "peas wet": {
+    "crop": "Peas Wet",
+    "modal_price": 2150,
+    "min_price": 1000,
+    "max_price": 3800,
+    "markets_count": 16,
+    "top_markets": [
+      {
+        "name": "SMY Jaisinghpur",
+        "district": "Kangra",
+        "state": "Himachal Pradesh",
+        "modal": 3400
+      },
+      {
+        "name": "Dera Bassi APMC",
+        "district": "Mohali",
+        "state": "Punjab",
+        "modal": 3100
+      },
+      {
+        "name": "SMY Rohroo",
+        "district": "Shimla",
+        "state": "Himachal Pradesh",
+        "modal": 2900
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "rice": {
+    "crop": "Rice",
+    "modal_price": 3837,
+    "min_price": 2140,
+    "max_price": 4900,
+    "markets_count": 7,
+    "top_markets": [
+      {
+        "name": "Durgapur APMC",
+        "district": "Paschim Bardhaman",
+        "state": "West Bengal",
+        "modal": 4850
+      },
+      {
+        "name": "Siliguri APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 4800
+      },
+      {
+        "name": "Kolaghat APMC",
+        "district": "Medinipur(E)",
+        "state": "West Bengal",
+        "modal": 4400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "tube rose(loose)": {
+    "crop": "Tube Rose(Loose)",
+    "modal_price": 13000,
+    "min_price": 12000,
+    "max_price": 14000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Kolaghat APMC",
+        "district": "Medinipur(E)",
+        "state": "West Bengal",
+        "modal": 13000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "turmeric(raw)": {
+    "crop": "Turmeric(raw)",
+    "modal_price": 2000,
+    "min_price": 1800,
+    "max_price": 2300,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Baghty APMC",
+        "district": "Wokha",
+        "state": "Nagaland",
+        "modal": 2000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "ashgourd": {
+    "crop": "Ashgourd",
+    "modal_price": 1932,
+    "min_price": 1000,
+    "max_price": 3500,
+    "markets_count": 28,
+    "top_markets": [
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      },
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 3000
+      },
+      {
+        "name": "Tiruvarur(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvarur",
+        "state": "Tamil Nadu",
+        "modal": 2400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "bhindi(ladies finger)": {
+    "crop": "Bhindi(Ladies Finger)",
+    "modal_price": 4485,
+    "min_price": 2400,
+    "max_price": 6000,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 5700
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "paddy(common)": {
+    "crop": "Paddy(Common)",
+    "modal_price": 2220,
+    "min_price": 1883,
+    "max_price": 3000,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Avalurpet APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 2441
+      },
+      {
+        "name": "Vedaranyam APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 2000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "chikoos(sapota)": {
+    "crop": "Chikoos(Sapota)",
+    "modal_price": 3703,
+    "min_price": 2500,
+    "max_price": 5000,
+    "markets_count": 17,
+    "top_markets": [
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      },
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "guava": {
+    "crop": "Guava",
+    "modal_price": 5476,
+    "min_price": 3500,
+    "max_price": 8000,
+    "markets_count": 19,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 8000
+      },
+      {
+        "name": "Tiruchengode APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 6500
+      },
+      {
+        "name": "Tiruvarur(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvarur",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "tender coconut": {
+    "crop": "Tender Coconut",
+    "modal_price": 3112,
+    "min_price": 2000,
+    "max_price": 4500,
+    "markets_count": 12,
+    "top_markets": [
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      },
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "bottle gourd": {
+    "crop": "Bottle gourd",
+    "modal_price": 1705,
+    "min_price": 500,
+    "max_price": 3600,
+    "markets_count": 31,
+    "top_markets": [
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 3600
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 3600
+      },
+      {
+        "name": "Mayiladuthurai(Uzhavar Sandhai ) APMC",
+        "district": "Nagapattinam",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "coconut": {
+    "crop": "Coconut",
+    "modal_price": 5162,
+    "min_price": 2500,
+    "max_price": 7000,
+    "markets_count": 30,
+    "top_markets": [
+      {
+        "name": "Karimangalam(Uzhavar Sandhai)",
+        "district": "Dharmapuri",
+        "state": "Tamil Nadu",
+        "modal": 6750
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6500
+      },
+      {
+        "name": "Papanasam(Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "beetroot": {
+    "crop": "Beetroot",
+    "modal_price": 3734,
+    "min_price": 2000,
+    "max_price": 5500,
+    "markets_count": 25,
+    "top_markets": [
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 5200
+      },
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Mecheri(Uzhavar Sandhai)",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cabbage": {
+    "crop": "Cabbage",
+    "modal_price": 2269,
+    "min_price": 1200,
+    "max_price": 3500,
+    "markets_count": 24,
+    "top_markets": [
+      {
+        "name": "Mecheri(Uzhavar Sandhai)",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      },
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "elephant yam(suran)/amorphophallus": {
+    "crop": "Elephant Yam(Suran)/Amorphophallus",
+    "modal_price": 3188,
+    "min_price": 2000,
+    "max_price": 4400,
+    "markets_count": 16,
+    "top_markets": [
+      {
+        "name": "Sathiyamagalam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 4200
+      },
+      {
+        "name": "Paramathivelur(Uzhavar Sandhai ) APMC",
+        "district": "Namakkal",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "colacasia": {
+    "crop": "Colacasia",
+    "modal_price": 3945,
+    "min_price": 3000,
+    "max_price": 5000,
+    "markets_count": 10,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 4800
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Singanallur(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "castor seed": {
+    "crop": "Castor Seed",
+    "modal_price": 6130,
+    "min_price": 5830,
+    "max_price": 6130,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Dhoraji APMC",
+        "district": "Rajkot",
+        "state": "Gujarat",
+        "modal": 6130
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "wheat": {
+    "crop": "Wheat",
+    "modal_price": 2468,
+    "min_price": 2070,
+    "max_price": 2800,
+    "markets_count": 5,
+    "top_markets": [
+      {
+        "name": "Durgapur APMC",
+        "district": "Paschim Bardhaman",
+        "state": "West Bengal",
+        "modal": 2700
+      },
+      {
+        "name": "Sikandraraau APMC",
+        "district": "Hathras",
+        "state": "Uttar Pradesh",
+        "modal": 2500
+      },
+      {
+        "name": "Babra APMC",
+        "district": "Amreli",
+        "state": "Gujarat",
+        "modal": 2450
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cotton": {
+    "crop": "Cotton",
+    "modal_price": 7645,
+    "min_price": 7050,
+    "max_price": 8020,
+    "markets_count": 3,
+    "top_markets": [
+      {
+        "name": "Badnawar APMC",
+        "district": "Dhar",
+        "state": "Madhya Pradesh",
+        "modal": 7750
+      },
+      {
+        "name": "Una APMC",
+        "district": "Gir Somnath",
+        "state": "Gujarat",
+        "modal": 7625
+      },
+      {
+        "name": "Babra APMC",
+        "district": "Amreli",
+        "state": "Gujarat",
+        "modal": 7560
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "guar": {
+    "crop": "Guar",
+    "modal_price": 7250,
+    "min_price": 5000,
+    "max_price": 8000,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "Songadh(Umrada) APMC",
+        "district": "Surat",
+        "state": "Gujarat",
+        "modal": 8000
+      },
+      {
+        "name": "Songadh APMC",
+        "district": "Surat",
+        "state": "Gujarat",
+        "modal": 8000
+      },
+      {
+        "name": "Songadh(Badarpada) APMC",
+        "district": "Surat",
+        "state": "Gujarat",
+        "modal": 8000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "arecanut(betelnut/supari)": {
+    "crop": "Arecanut(Betelnut/Supari)",
+    "modal_price": 42250,
+    "min_price": 41250,
+    "max_price": 43250,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Payyannur APMC",
+        "district": "Kannur",
+        "state": "Kerala",
+        "modal": 42250
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "orange": {
+    "crop": "Orange",
+    "modal_price": 8575,
+    "min_price": 6000,
+    "max_price": 10000,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 9300
+      },
+      {
+        "name": "Singanallur(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 9000
+      },
+      {
+        "name": "Vadavalli(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 8000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cowpea(veg)": {
+    "crop": "Cowpea(Veg)",
+    "modal_price": 3159,
+    "min_price": 1500,
+    "max_price": 6000,
+    "markets_count": 11,
+    "top_markets": [
+      {
+        "name": "Tindivanam APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 6000
+      },
+      {
+        "name": "Karimangalam(Uzhavar Sandhai)",
+        "district": "Dharmapuri",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Perampet(Uzhavar Sandhai)",
+        "district": "Vellore",
+        "state": "Tamil Nadu",
+        "modal": 3500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mango(raw-ripe)": {
+    "crop": "Mango(Raw-Ripe)",
+    "modal_price": 7017,
+    "min_price": 3500,
+    "max_price": 11000,
+    "markets_count": 15,
+    "top_markets": [
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 9750
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 9250
+      },
+      {
+        "name": "Gandhigramam(Uzhavar Sandhai)",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 9000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "pumpkin": {
+    "crop": "Pumpkin",
+    "modal_price": 1904,
+    "min_price": 1000,
+    "max_price": 3500,
+    "markets_count": 28,
+    "top_markets": [
+      {
+        "name": "Gobichettipalayam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 3250
+      },
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 3000
+      },
+      {
+        "name": "Cheyyar(Uzhavar Sandhai ) APMC",
+        "district": "Thiruvannamalai",
+        "state": "Tamil Nadu",
+        "modal": 2750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "sweet pumpkin": {
+    "crop": "Sweet Pumpkin",
+    "modal_price": 1650,
+    "min_price": 950,
+    "max_price": 2400,
+    "markets_count": 3,
+    "top_markets": [
+      {
+        "name": "Tamluk (Medinipur E) APMC",
+        "district": "Medinipur(E)",
+        "state": "West Bengal",
+        "modal": 2200
+      },
+      {
+        "name": "Baghapurana APMC",
+        "district": "Moga",
+        "state": "Punjab",
+        "modal": 1800
+      },
+      {
+        "name": "Jalalabad APMC",
+        "district": "Fazilka",
+        "state": "Punjab",
+        "modal": 950
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "kinnow": {
+    "crop": "Kinnow",
+    "modal_price": 3782,
+    "min_price": 2000,
+    "max_price": 5500,
+    "markets_count": 11,
+    "top_markets": [
+      {
+        "name": "SMY Rohroo",
+        "district": "Shimla",
+        "state": "Himachal Pradesh",
+        "modal": 5250
+      },
+      {
+        "name": "SMY Baijnath",
+        "district": "Kangra",
+        "state": "Himachal Pradesh",
+        "modal": 5200
+      },
+      {
+        "name": "Tanda Urmur APMC",
+        "district": "Hoshiarpur",
+        "state": "Punjab",
+        "modal": 4500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "papaya(raw)": {
+    "crop": "Papaya(Raw)",
+    "modal_price": 2800,
+    "min_price": 2800,
+    "max_price": 2800,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Kottakkal APMC",
+        "district": "Malappuram",
+        "state": "Kerala",
+        "modal": 2800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "grapes": {
+    "crop": "Grapes",
+    "modal_price": 11125,
+    "min_price": 8000,
+    "max_price": 19000,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 14000
+      },
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 12500
+      },
+      {
+        "name": "Vadavalli(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 9500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "pineapple": {
+    "crop": "Pineapple",
+    "modal_price": 6750,
+    "min_price": 6500,
+    "max_price": 7000,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Vadavalli(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 6750
+      },
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 6750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "apple": {
+    "crop": "Apple",
+    "modal_price": 20750,
+    "min_price": 15000,
+    "max_price": 24000,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 23500
+      },
+      {
+        "name": "Vadavalli(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 21000
+      },
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 21000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "turnip": {
+    "crop": "Turnip",
+    "modal_price": 4100,
+    "min_price": 2500,
+    "max_price": 5500,
+    "markets_count": 5,
+    "top_markets": [
+      {
+        "name": "Sathiyamagalam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 5250
+      },
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 4500
+      },
+      {
+        "name": "Singanallur(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 4250
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "arhar dal(tur dal)": {
+    "crop": "Arhar Dal(Tur Dal)",
+    "modal_price": 12500,
+    "min_price": 12300,
+    "max_price": 12700,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Siliguri APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 12500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "black gram dal(urd dal)": {
+    "crop": "Black Gram Dal(Urd Dal)",
+    "modal_price": 10000,
+    "min_price": 9900,
+    "max_price": 10100,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Siliguri APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 10000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "groundnut": {
+    "crop": "Groundnut",
+    "modal_price": 6580,
+    "min_price": 4200,
+    "max_price": 8000,
+    "markets_count": 5,
+    "top_markets": [
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 7750
+      },
+      {
+        "name": "Pallikonda(Uzhavar Sandhai)",
+        "district": "Vellore",
+        "state": "Tamil Nadu",
+        "modal": 7000
+      },
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 7000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "knool khol": {
+    "crop": "Knool Khol",
+    "modal_price": 3455,
+    "min_price": 2500,
+    "max_price": 5500,
+    "markets_count": 10,
+    "top_markets": [
+      {
+        "name": "Sathiyamagalam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 5250
+      },
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 3750
+      },
+      {
+        "name": "Thammampatti (Uzhavar Sandhai ) APMC",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "modal": 3650
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mousambi(sweet lime)": {
+    "crop": "Mousambi(Sweet Lime)",
+    "modal_price": 4667,
+    "min_price": 2500,
+    "max_price": 6000,
+    "markets_count": 6,
+    "top_markets": [
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 5700
+      },
+      {
+        "name": "Singanallur(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5500
+      },
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 5400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "maize": {
+    "crop": "Maize",
+    "modal_price": 1883,
+    "min_price": 1600,
+    "max_price": 2400,
+    "markets_count": 3,
+    "top_markets": [
+      {
+        "name": "Sathupally APMC",
+        "district": "Mahbubnagar",
+        "state": "Telangana",
+        "modal": 2350
+      },
+      {
+        "name": "Manawar APMC",
+        "district": "Dhar",
+        "state": "Madhya Pradesh",
+        "modal": 1650
+      },
+      {
+        "name": "Kapasan APMC",
+        "district": "Chittorgarh",
+        "state": "Rajasthan",
+        "modal": 1650
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "thondekai": {
+    "crop": "Thondekai",
+    "modal_price": 3533,
+    "min_price": 2400,
+    "max_price": 5000,
+    "markets_count": 12,
+    "top_markets": [
+      {
+        "name": "Ulundurpettai APMC",
+        "district": "Villupuram",
+        "state": "Tamil Nadu",
+        "modal": 5000
+      },
+      {
+        "name": "Karimangalam(Uzhavar Sandhai)",
+        "district": "Dharmapuri",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "betal leaves": {
+    "crop": "Betal Leaves",
+    "modal_price": 16750,
+    "min_price": 16000,
+    "max_price": 17500,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Singanallur(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 16750
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "green peas": {
+    "crop": "Green Peas",
+    "modal_price": 5982,
+    "min_price": 4500,
+    "max_price": 7200,
+    "markets_count": 11,
+    "top_markets": [
+      {
+        "name": "Sampath Nagar(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 7100
+      },
+      {
+        "name": "Karur(Uzhavar Sandhai ) APMC",
+        "district": "Karur",
+        "state": "Tamil Nadu",
+        "modal": 6750
+      },
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "indian beans(seam)": {
+    "crop": "Indian Beans(Seam)",
+    "modal_price": 5062,
+    "min_price": 3500,
+    "max_price": 6500,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 6500
+      },
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 6250
+      },
+      {
+        "name": "Perampet(Uzhavar Sandhai)",
+        "district": "Vellore",
+        "state": "Tamil Nadu",
+        "modal": 4000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "squash(chappal kadoo)": {
+    "crop": "Squash(Chappal Kadoo)",
+    "modal_price": 1625,
+    "min_price": 1400,
+    "max_price": 1800,
+    "markets_count": 4,
+    "top_markets": [
+      {
+        "name": "Karsiyang(Matigara) APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 1700
+      },
+      {
+        "name": "Darjeeling APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 1700
+      },
+      {
+        "name": "Siliguri APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 1700
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mashrooms": {
+    "crop": "Mashrooms",
+    "modal_price": 21500,
+    "min_price": 17000,
+    "max_price": 25000,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Kumbakonam (Uzhavar Sandhai ) APMC",
+        "district": "Thanjavur",
+        "state": "Tamil Nadu",
+        "modal": 25000
+      },
+      {
+        "name": "Pollachi(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 18000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "soyabean": {
+    "crop": "Soyabean",
+    "modal_price": 5065,
+    "min_price": 4180,
+    "max_price": 5210,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Dhoraji APMC",
+        "district": "Rajkot",
+        "state": "Gujarat",
+        "modal": 5065
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "little gourd(kundru)": {
+    "crop": "Little gourd(Kundru)",
+    "modal_price": 4250,
+    "min_price": 3500,
+    "max_price": 5000,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Pampady APMC",
+        "district": "Kottayam",
+        "state": "Kerala",
+        "modal": 4500
+      },
+      {
+        "name": "North Paravur APMC",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "modal": 4000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "field pea": {
+    "crop": "Field Pea",
+    "modal_price": 1933,
+    "min_price": 1500,
+    "max_price": 2500,
+    "markets_count": 3,
+    "top_markets": [
+      {
+        "name": "Tanda Urmur APMC",
+        "district": "Hoshiarpur",
+        "state": "Punjab",
+        "modal": 2000
+      },
+      {
+        "name": "Mukerian APMC",
+        "district": "Hoshiarpur",
+        "state": "Punjab",
+        "modal": 2000
+      },
+      {
+        "name": "Garh Shankar(Mahalpur) APMC",
+        "district": "Hoshiarpur",
+        "state": "Punjab",
+        "modal": 1800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "round gourd": {
+    "crop": "Round gourd",
+    "modal_price": 1950,
+    "min_price": 1400,
+    "max_price": 2500,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Sahnewal APMC",
+        "district": "Ludhiana",
+        "state": "Punjab",
+        "modal": 2500
+      },
+      {
+        "name": "Khanna APMC",
+        "district": "Ludhiana",
+        "state": "Punjab",
+        "modal": 1400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "coffee": {
+    "crop": "Coffee",
+    "modal_price": 21700,
+    "min_price": 21600,
+    "max_price": 21800,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Pulpally APMC",
+        "district": "Wayanad",
+        "state": "Kerala",
+        "modal": 21700
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "water melon": {
+    "crop": "Water Melon",
+    "modal_price": 2117,
+    "min_price": 1500,
+    "max_price": 2600,
+    "markets_count": 6,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 2500
+      },
+      {
+        "name": "Sathiyamagalam(Uzhavar Sandhai ) APMC",
+        "district": "Erode",
+        "state": "Tamil Nadu",
+        "modal": 2300
+      },
+      {
+        "name": "Mettupalayam(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 2200
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mango": {
+    "crop": "Mango",
+    "modal_price": 17000,
+    "min_price": 16000,
+    "max_price": 18000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 17000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "arhar(tur/red gram)(whole)": {
+    "crop": "Arhar(Tur/Red Gram)(Whole)",
+    "modal_price": 7230,
+    "min_price": 6855,
+    "max_price": 7380,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Dhoraji APMC",
+        "district": "Rajkot",
+        "state": "Gujarat",
+        "modal": 7230
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "jowar(sorghum)": {
+    "crop": "Jowar(Sorghum)",
+    "modal_price": 3080,
+    "min_price": 3080,
+    "max_price": 3080,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Dhoraji APMC",
+        "district": "Rajkot",
+        "state": "Gujarat",
+        "modal": 3080
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "cummin seed(jeera)": {
+    "crop": "Cummin Seed(Jeera)",
+    "modal_price": 18075,
+    "min_price": 15100,
+    "max_price": 21050,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Babra APMC",
+        "district": "Amreli",
+        "state": "Gujarat",
+        "modal": 18075
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "ber(zizyphus/borehannu)": {
+    "crop": "Ber(Zizyphus/Borehannu)",
+    "modal_price": 2500,
+    "min_price": 2500,
+    "max_price": 2500,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Jalalabad APMC",
+        "district": "Fazilka",
+        "state": "Punjab",
+        "modal": 2500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "amranthas red": {
+    "crop": "Amranthas Red",
+    "modal_price": 2500,
+    "min_price": 2500,
+    "max_price": 2500,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Kottakkal APMC",
+        "district": "Malappuram",
+        "state": "Kerala",
+        "modal": 2500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "seemebadnekai": {
+    "crop": "Seemebadnekai",
+    "modal_price": 2500,
+    "min_price": 2000,
+    "max_price": 3000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "North Paravur APMC",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "modal": 2500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "season leaves": {
+    "crop": "Season Leaves",
+    "modal_price": 400,
+    "min_price": 300,
+    "max_price": 500,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "SMY Takoli",
+        "district": "Mandi",
+        "state": "Himachal Pradesh",
+        "modal": 400
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "masur dal": {
+    "crop": "Masur Dal",
+    "modal_price": 11000,
+    "min_price": 9665,
+    "max_price": 12300,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Siliguri APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 12200
+      },
+      {
+        "name": "Durgapur APMC",
+        "district": "Paschim Bardhaman",
+        "state": "West Bengal",
+        "modal": 9800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "pear(marasebu)": {
+    "crop": "Pear(Marasebu)",
+    "modal_price": 15500,
+    "min_price": 15000,
+    "max_price": 16000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 15500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "strawberry": {
+    "crop": "Strawberry",
+    "modal_price": 11300,
+    "min_price": 11100,
+    "max_price": 111500,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Sriganganagar (F&V) APMC",
+        "district": "Ganganagar",
+        "state": "Rajasthan",
+        "modal": 11300
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "custard apple(sharifa)": {
+    "crop": "Custard Apple(Sharifa)",
+    "modal_price": 5500,
+    "min_price": 5300,
+    "max_price": 5700,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Sriganganagar (F&V) APMC",
+        "district": "Ganganagar",
+        "state": "Rajasthan",
+        "modal": 5500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "marigold(loose)": {
+    "crop": "Marigold(loose)",
+    "modal_price": 3500,
+    "min_price": 3000,
+    "max_price": 4000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Kolaghat APMC",
+        "district": "Medinipur(E)",
+        "state": "West Bengal",
+        "modal": 3500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "rose(local)": {
+    "crop": "Rose(Local)",
+    "modal_price": 31000,
+    "min_price": 30000,
+    "max_price": 32000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Kolaghat APMC",
+        "district": "Medinipur(E)",
+        "state": "West Bengal",
+        "modal": 31000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "leafy vegetable": {
+    "crop": "Leafy Vegetable",
+    "modal_price": 1800,
+    "min_price": 1500,
+    "max_price": 2100,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Wokha Town APMC",
+        "district": "Wokha",
+        "state": "Nagaland",
+        "modal": 1800
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mustard": {
+    "crop": "Mustard",
+    "modal_price": 6300,
+    "min_price": 6200,
+    "max_price": 6400,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Durgapur APMC",
+        "district": "Paschim Bardhaman",
+        "state": "West Bengal",
+        "modal": 6300
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "bengal gram(gram)(whole)": {
+    "crop": "Bengal Gram(Gram)(Whole)",
+    "modal_price": 4755,
+    "min_price": 4705,
+    "max_price": 5105,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Dhoraji APMC",
+        "district": "Rajkot",
+        "state": "Gujarat",
+        "modal": 4755
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "coconut seed": {
+    "crop": "Coconut Seed",
+    "modal_price": 5000,
+    "min_price": 4900,
+    "max_price": 5100,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Payyannur APMC",
+        "district": "Kannur",
+        "state": "Kerala",
+        "modal": 5000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "copra": {
+    "crop": "Copra",
+    "modal_price": 14100,
+    "min_price": 14000,
+    "max_price": 14200,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Payyannur APMC",
+        "district": "Kannur",
+        "state": "Kerala",
+        "modal": 14100
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "pea pod/pea cod/हरी मटर": {
+    "crop": "Pea Pod/Pea Cod/हरी मटर",
+    "modal_price": 1800,
+    "min_price": 1500,
+    "max_price": 2000,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "Tarantaran APMC",
+        "district": "Tarntaran",
+        "state": "Punjab",
+        "modal": 2000
+      },
+      {
+        "name": "Haridwar Union APMC",
+        "district": "Haridwar",
+        "state": "Uttarakhand",
+        "modal": 1600
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "gram raw(chholia)": {
+    "crop": "Gram Raw(Chholia)",
+    "modal_price": 1000,
+    "min_price": 1000,
+    "max_price": 1000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Jalalabad APMC",
+        "district": "Fazilka",
+        "state": "Punjab",
+        "modal": 1000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "black pepper": {
+    "crop": "Black pepper",
+    "modal_price": 71500,
+    "min_price": 62000,
+    "max_price": 95000,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "North Paravur APMC",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "modal": 80000
+      },
+      {
+        "name": "Payyannur APMC",
+        "district": "Kannur",
+        "state": "Kerala",
+        "modal": 63000
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "alsandikai": {
+    "crop": "Alsandikai",
+    "modal_price": 3500,
+    "min_price": 3000,
+    "max_price": 4000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "North Paravur APMC",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "modal": 3500
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "karbuja(musk melon)": {
+    "crop": "Karbuja(Musk Melon)",
+    "modal_price": 3300,
+    "min_price": 3000,
+    "max_price": 3600,
+    "markets_count": 2,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3300
+      },
+      {
+        "name": "Vadavalli(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 3300
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "bajra(pearl millet/cumbu)": {
+    "crop": "Bajra(Pearl Millet/Cumbu)",
+    "modal_price": 1865,
+    "min_price": 1755,
+    "max_price": 1910,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Sikandraraau APMC",
+        "district": "Hathras",
+        "state": "Uttar Pradesh",
+        "modal": 1865
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "mustard oil": {
+    "crop": "Mustard Oil",
+    "modal_price": 16450,
+    "min_price": 16250,
+    "max_price": 16600,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Durgapur APMC",
+        "district": "Paschim Bardhaman",
+        "state": "West Bengal",
+        "modal": 16450
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "rubber": {
+    "crop": "Rubber",
+    "modal_price": 19700,
+    "min_price": 19600,
+    "max_price": 19800,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Pulpally APMC",
+        "district": "Wayanad",
+        "state": "Kerala",
+        "modal": 19700
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "green gram dal(moong dal)": {
+    "crop": "Green Gram Dal(Moong Dal)",
+    "modal_price": 9700,
+    "min_price": 9600,
+    "max_price": 9800,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "Siliguri APMC",
+        "district": "Darjeeling",
+        "state": "West Bengal",
+        "modal": 9700
+      }
+    ],
+    "source_date": "05/03/2026"
+  },
+  "jack fruit(ripe)": {
+    "crop": "Jack Fruit(Ripe)",
+    "modal_price": 4750,
+    "min_price": 4500,
+    "max_price": 5000,
+    "markets_count": 1,
+    "top_markets": [
+      {
+        "name": "RSPuram(Uzhavar Sandhai ) APMC",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "modal": 4750
+      }
+    ],
+    "source_date": "05/03/2026"
+  }
+}

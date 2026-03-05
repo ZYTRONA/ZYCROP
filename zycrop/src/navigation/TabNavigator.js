@@ -31,30 +31,42 @@ export default function TabNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { height: 70, paddingBottom: 10, paddingTop: 10, backgroundColor: 'white' },
+        tabBarStyle: {
+          height: 76,
+          paddingBottom: 12,
+          paddingTop: 8,
+          backgroundColor: 'white',
+          borderTopWidth: 0,
+          elevation: 24,
+          shadowColor: '#000',
+          shadowOpacity: 0.14,
+          shadowOffset: { width: 0, height: -4 },
+          shadowRadius: 18,
+        },
         tabBarActiveTintColor: '#1b5e20',
-        tabBarInactiveTintColor: '#9e9e9e',
+        tabBarInactiveTintColor: '#bdbdbd',
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '700', marginTop: 2 },
       }}
     >
       <Tab.Screen
         name="Home"
         component={DashboardStack}
-        options={{ tabBarIcon: ({ color }) => <Home color={color} size={24} /> }}
+        options={{ tabBarIcon: ({ color, size }) => <Home color={color} size={22} /> }}
       />
       <Tab.Screen
         name="AI Scan"
         component={Pathologist}
-        options={{ tabBarIcon: ({ color }) => <Camera color={color} size={24} /> }}
+        options={{ tabBarIcon: ({ color, size }) => <Camera color={color} size={22} /> }}
       />
       <Tab.Screen
         name="Market"
         component={MarketAI}
-        options={{ tabBarIcon: ({ color }) => <TrendingUp color={color} size={24} /> }}
+        options={{ tabBarIcon: ({ color, size }) => <TrendingUp color={color} size={22} /> }}
       />
       <Tab.Screen
         name="Loans"
         component={LoanAdvisor}
-        options={{ tabBarIcon: ({ color }) => <CreditCard color={color} size={24} /> }}
+        options={{ tabBarIcon: ({ color, size }) => <CreditCard color={color} size={22} /> }}
       />
     </Tab.Navigator>
   )
