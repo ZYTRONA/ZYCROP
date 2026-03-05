@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "zycrop",
+    "slug": "zycrop",
+    "version": "1.0.0",
+    "sdkVersion": "54.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "runtimeVersion": "54.0.0",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow ZYCROP to access the camera for crop disease detection"
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow ZYCROP to use Face ID for biometric authentication"
+        }
+      ]
+    ],
+    "permissions": [
+      "camera",
+      "android.permission.CAMERA",
+      "android.permission.INTERNET"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zytrona.zycrop"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "package": "com.zytrona.zycrop",
+      "permissions": [
+        "USE_CAMERA",
+        "CAMERA",
+        "INTERNET",
+        "RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
