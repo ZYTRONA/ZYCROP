@@ -1,0 +1,39 @@
+node_modules
+.venv/
+.venv312/
+__pycache__/
+*.pyc
+*.pyo
+*.so
+*.egg-info/
+dist/
+build/
+.env
+
+# ML Models - use Git LFS for these large files
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.pb
+*.h5
+*.pkl
+*.joblib
+
+# Data files
+*.csv
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android build artifacts
+android/build/
+*.apk
