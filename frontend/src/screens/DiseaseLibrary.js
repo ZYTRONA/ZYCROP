@@ -53,23 +53,26 @@ export default function DiseaseLibrary({ navigation }) {
   const [selectedCategoryIdx, setSelectedCategoryIdx] = useState(0);
   const [selectedDisease, setSelectedDisease] = useState(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
-  const [failedImages, setFailedImages] = useState(new Set()); // Track failed images
 
-  // Handle image load errors - fallback to picsum
-  const handleImageError = (imageName, sizeType) => {
-    const key = `${imageName}-${sizeType}`;
-    setFailedImages(prev => new Set([...prev, key]));
+  // Handle image load errors with detailed logging
+  const handleImageError = (imageName) => {
+    console.error(`📷 Image failed to load for disease: ${imageName}`);
+  };
+
+  const handleImageLoad = (imageName) => {
+    console.log(`✅ Image loaded successfully for: ${imageName}`);
   };
 
   // Get image with fallback
   const getImageSource = (imageName, sizeType = 'thumb') => {
-    const img = getDiseaseImg(imageName, sizeType);
-    const key = `${imageName}-${sizeType}`;
-    const shouldUseFallback = failedImages.has(key);
-    return {
-      uri: shouldUseFallback ? img.fallback : img.uri,
-      fallback: img.fallback,
-    };
+    try {
+      const img = getDiseaseImg(imageName, sizeType);
+      console.log(`🖼️ Getting image for ${imageName} (${sizeType}):`, typeof img, img);
+      return img;
+    } catch (error) {
+      console.error(`Error getting image source for ${imageName}:`, error);
+      return require('../../assets/disease_library/leaf blight/rice leaf blight.webp');
+    }
   };
 
   // Disease categories for filtering
@@ -130,7 +133,7 @@ export default function DiseaseLibrary({ navigation }) {
           <Image
             source={getImageSource(disease.name, 'thumb')}
             style={styles.thumbnail}
-            onError={() => handleImageError(disease.name, 'thumb')}
+            onError={() => handleImageError(disease.name)}
           />
           <View style={[styles.categoryBadge, { backgroundColor: categoryColor }]}>
             <MaterialCommunityIcons
@@ -211,7 +214,7 @@ export default function DiseaseLibrary({ navigation }) {
               <Image
                 source={getImageSource(selectedDisease.name, 'hero')}
                 style={styles.heroImage}
-                onError={() => handleImageError(selectedDisease.name, 'hero')}
+                onError={() => handleImageError(selectedDisease.name)}
               />
               <View style={[styles.heroOverlay, { backgroundColor: categoryColor }]} />
             </View>

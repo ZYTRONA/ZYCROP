@@ -741,14 +741,34 @@ export const DiseaseImages = {
 // ═══════════════════════════════════════════════════════════════
 
 /**
- * Get disease by name
+ * Get disease by name with optional size type
  * @param {string} name - Disease name (e.g., 'Leaf Blight')
- * @returns {object} Disease data with local images
+ * @param {string} sizeType - Image size ('thumb', 'card', 'hero', 'market')
+ * @returns {object|array} Disease data or image sources based on parameters
  */
-export const getDiseaseImg = (name) => {
+export const getDiseaseImg = (name, sizeType = null) => {
   // Find disease by name
-  const disease = Object.values(DiseaseImages).find((d) => d.name === name);
-  return disease || DiseaseImages.leaf_blight; // Default to leaf_blight if not found
+  const foundDisease = Object.values(DiseaseImages).find((d) => d.name === name);
+  const disease = foundDisease || DiseaseImages.leaf_blight;
+
+  // Validate disease exists
+  if (!disease) {
+    console.warn(`Disease not found: ${name}, using Leaf Blight as fallback`);
+    disease = DiseaseImages.leaf_blight;
+  }
+
+  // If sizeType is specified, return just that image source (require result)
+  if (sizeType) {
+    const imageSource = disease[sizeType] || disease.thumb;
+    if (!imageSource) {
+      console.warn(`Image not found for disease: ${name}, sizeType: ${sizeType}`);
+      return disease.thumb;
+    }
+    return imageSource;
+  }
+
+  // Otherwise return the full disease object
+  return disease;
 };
 
 /**
