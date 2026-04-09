@@ -2,5 +2,8 @@
   "name": "zycrop-root",
   "version": "1.0.0",
   "description": "ZYCROP - AI-Powered Smart Farming App (Workspace Root)",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "expo": "^54.0.6"
+  }
 }
