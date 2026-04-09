@@ -1,0 +1,36 @@
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+motor==3.4.0
+pymongo==4.7.3
+python-multipart==0.0.9
+pydantic==2.7.4
+python-dotenv==1.0.1
+httpx>=0.24.0
+Pillow>=11.0.0
+
+# ── Machine Learning ──────────────────────────────────────────────────────────
+tensorflow>=2.16.0
+tensorflow-hub>=0.16.0
+tensorflow-datasets>=4.9.4
+# NOTE: tflite-runtime not available for Python 3.14+ — using tensorflow.lite fallback
+scikit-learn>=1.4.0
+numpy>=1.26.0
+pandas>=2.2.0
+
+# ── YOLOv8 Real-time Object Detection ──────────────────────────────────────────
+ultralytics>=8.0.0          # YOLOv8 with auto-download to ~/.cache/ultralytics/
+torch>=2.0.0                # PyTorch (YOLOv8 dependency)
+torchvision>=0.15.0         # Torchvision (YOLOv8 dependency)
+
+# ── NLP / Embeddings (for GovSchemes RAG) ────────────────────────────────────
+sentence-transformers>=3.0.0
+transformers>=4.40.0
+# ── Voice / STT (Bhashini alternative) ──────────────────────────────────
+faster-whisper>=1.0.0        # OpenAI Whisper-tiny, CPU-optimised, int8 quantized
+                              # First run downloads ~75 MB model automatically
+ctranslate2>=4.0.0           # Required for IndicTrans2 offline translation
+                              # Also install: sentencepiece
+                              # Model download: https://github.com/AI4Bharat/IndicTrans2
+sentencepiece>=0.2.0         # Tokenizer for IndicTrans2 CTranslate2
+# ── Image processing ──────────────────────────────────────────────────────────
+opencv-python-headless>=4.9.0

@@ -1,0 +1,6 @@
+{
+  "venvPath": ".",
+  "venv": ".venv312",
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "off"
+}
