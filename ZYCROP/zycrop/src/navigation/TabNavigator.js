@@ -238,25 +238,53 @@ const TAB_LABEL_KEYS = {
 // ─── Tab Navigator ─────────────────────────────────────────────────────────────
 export default function TabNavigator() {
   const { t } = useLang()
+  
   return (
     <Tab.Navigator
       tabBar={props => <CustomTabBar {...props} />}
       screenOptions={({ route }) => {
-        const labelKey = TAB_LABEL_KEYS[route.name] || route.name
+        const labelKey = TAB_LABEL_KEYS[route.name]
+        const translatedLabel = labelKey ? t[labelKey] : route.name
+        
         return {
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.textMuted,
-          tabBarLabel: t[labelKey] || route.name,
+          title: translatedLabel,
+          tabBarLabel: translatedLabel,
         }
       }}
     >
-      <Tab.Screen name="Home"     component={DashboardStack} />
-      <Tab.Screen name="AI Scan"  component={PathologistStack} />
-      <Tab.Screen name="Library"  component={LibraryStack} />
-      <Tab.Screen name="Market"   component={MarketStack} />
-      <Tab.Screen name="Loans"    component={LoanStack} />
-      <Tab.Screen name="Calendar" component={CalendarStack} />
+      <Tab.Screen 
+        name="Home" 
+        component={DashboardStack}
+        options={{ title: 'Home' }}
+      />
+      <Tab.Screen 
+        name="AI Scan" 
+        component={PathologistStack}
+        options={{ title: 'AI Scan' }}
+      />
+      <Tab.Screen 
+        name="Library" 
+        component={LibraryStack}
+        options={{ title: 'Library' }}
+      />
+      <Tab.Screen 
+        name="Market" 
+        component={MarketStack}
+        options={{ title: 'Market' }}
+      />
+      <Tab.Screen 
+        name="Loans" 
+        component={LoanStack}
+        options={{ title: 'Loans' }}
+      />
+      <Tab.Screen 
+        name="Calendar" 
+        component={CalendarStack}
+        options={{ title: 'Calendar' }}
+      />
     </Tab.Navigator>
   )
 }

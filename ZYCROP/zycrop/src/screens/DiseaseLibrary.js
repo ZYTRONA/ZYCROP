@@ -53,6 +53,24 @@ export default function DiseaseLibrary({ navigation }) {
   const [selectedCategoryIdx, setSelectedCategoryIdx] = useState(0);
   const [selectedDisease, setSelectedDisease] = useState(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [failedImages, setFailedImages] = useState(new Set()); // Track failed images
+
+  // Handle image load errors - fallback to picsum
+  const handleImageError = (imageName, sizeType) => {
+    const key = `${imageName}-${sizeType}`;
+    setFailedImages(prev => new Set([...prev, key]));
+  };
+
+  // Get image with fallback
+  const getImageSource = (imageName, sizeType = 'thumb') => {
+    const img = getDiseaseImg(imageName, sizeType);
+    const key = `${imageName}-${sizeType}`;
+    const shouldUseFallback = failedImages.has(key);
+    return {
+      uri: shouldUseFallback ? img.fallback : img.uri,
+      fallback: img.fallback,
+    };
+  };
 
   // Disease categories for filtering
   const DISEASE_CATEGORIES = useMemo(
@@ -96,7 +114,6 @@ export default function DiseaseLibrary({ navigation }) {
   // LIST ITEM COMPONENT (Enhanced)
   // ────────────────────────────────────────
   const DiseaseListItem = ({ disease }) => {
-    const thumbImg = getDiseaseImg(disease.name, 'thumb');
     const categoryColor = CATEGORY_COLORS[disease.category] || colors.primary;
 
     return (
@@ -111,9 +128,9 @@ export default function DiseaseLibrary({ navigation }) {
         {/* Thumbnail image with category badge */}
         <View style={styles.imageContainer}>
           <Image
-            source={{ uri: thumbImg.uri }}
+            source={getImageSource(disease.name, 'thumb')}
             style={styles.thumbnail}
-            onError={() => {}}
+            onError={() => handleImageError(disease.name, 'thumb')}
           />
           <View style={[styles.categoryBadge, { backgroundColor: categoryColor }]}>
             <MaterialCommunityIcons
@@ -168,7 +185,6 @@ export default function DiseaseLibrary({ navigation }) {
   const DiseaseDetailModal = () => {
     if (!selectedDisease) return null;
 
-    const heroImg = getDiseaseImg(selectedDisease.name, 'hero');
     const categoryColor = CATEGORY_COLORS[selectedDisease.category] || colors.primary;
 
     return (
@@ -193,9 +209,9 @@ export default function DiseaseLibrary({ navigation }) {
             {/* Hero image */}
             <View style={styles.heroImageContainer}>
               <Image
-                source={{ uri: heroImg.uri }}
+                source={getImageSource(selectedDisease.name, 'hero')}
                 style={styles.heroImage}
-                onError={() => {}}
+                onError={() => handleImageError(selectedDisease.name, 'hero')}
               />
               <View style={[styles.heroOverlay, { backgroundColor: categoryColor }]} />
             </View>

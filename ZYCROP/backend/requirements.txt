@@ -5,13 +5,14 @@ pymongo==4.7.3
 python-multipart==0.0.9
 pydantic==2.7.4
 python-dotenv==1.0.1
+httpx>=0.24.0
 Pillow==10.3.0
 
 # ── Machine Learning ──────────────────────────────────────────────────────────
 tensorflow>=2.16.0
 tensorflow-hub>=0.16.0
 tensorflow-datasets>=4.9.4
-tflite-runtime>=2.14.0
+# tflite-runtime>=2.14.0  # (TensorFlow includes tflite support; tflite-runtime not available for Python 3.12)
 scikit-learn>=1.4.0
 numpy>=1.26.0
 pandas>=2.2.0
