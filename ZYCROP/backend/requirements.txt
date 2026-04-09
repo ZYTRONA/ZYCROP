@@ -6,16 +6,21 @@ python-multipart==0.0.9
 pydantic==2.7.4
 python-dotenv==1.0.1
 httpx>=0.24.0
-Pillow==10.3.0
+Pillow>=11.0.0
 
 # ── Machine Learning ──────────────────────────────────────────────────────────
 tensorflow>=2.16.0
 tensorflow-hub>=0.16.0
 tensorflow-datasets>=4.9.4
-# tflite-runtime>=2.14.0  # (TensorFlow includes tflite support; tflite-runtime not available for Python 3.12)
+# NOTE: tflite-runtime not available for Python 3.14+ — using tensorflow.lite fallback
 scikit-learn>=1.4.0
 numpy>=1.26.0
 pandas>=2.2.0
+
+# ── YOLOv8 Real-time Object Detection ──────────────────────────────────────────
+ultralytics>=8.0.0          # YOLOv8 with auto-download to ~/.cache/ultralytics/
+torch>=2.0.0                # PyTorch (YOLOv8 dependency)
+torchvision>=0.15.0         # Torchvision (YOLOv8 dependency)
 
 # ── NLP / Embeddings (for GovSchemes RAG) ────────────────────────────────────
 sentence-transformers>=3.0.0

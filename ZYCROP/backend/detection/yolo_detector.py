@@ -77,7 +77,7 @@ class YOLODetector(BaseDetector):
             print(f"[INFO] First run will auto-download model (~{12 if self.model_size == 'n' else 49 if self.model_size == 'm' else 100}MB)...")
             
             # ultralytics auto-downloads to ~/.cache/model; verbose=False reduces output
-            self.model = YOLO(f"{self.model_size}.pt", verbose=False)
+            self.model = YOLO(f"yolov8{self.model_size}.pt", verbose=False)
             
             duration = time.time() - start_time
             performance_logger.log_performance('yolo_detector', 'model_load', duration)

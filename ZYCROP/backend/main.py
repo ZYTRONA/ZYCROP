@@ -103,6 +103,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ─── YOLOv8 + Disease Detection Routes ────────────────────────────────────────
+try:
+    from detection_routes import router as detection_router, initialize_pipeline, shutdown_pipeline
+    app.include_router(detection_router)
+    print("[OK] Detection routes integrated")
+except ImportError as e:
+    print(f"[WARN] Detection routes not available: {e}")
+    initialize_pipeline = None
+    shutdown_pipeline = None
+
+# ─── Startup & Shutdown Handlers ──────────────────────────────────────────────
+@app.on_event("startup")
+async def startup_event():
+    """Initialize detection pipeline on app startup."""
+    if initialize_pipeline:
+        try:
+            await initialize_pipeline()
+        except Exception as e:
+            print(f"[WARN] Detection pipeline startup failed: {e}")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Shutdown detection pipeline on app shutdown."""
+    if shutdown_pipeline:
+        try:
+            await shutdown_pipeline()
+        except Exception as e:
+            print(f"[WARN] Detection pipeline shutdown failed: {e}")
+
 # ─── MongoDB ──────────────────────────────────────────────────────────────────
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/ZYCROP")
 mongo_client: Any = AsyncIOMotorClient(MONGO_URL)  # type: ignore[no-untyped-call]

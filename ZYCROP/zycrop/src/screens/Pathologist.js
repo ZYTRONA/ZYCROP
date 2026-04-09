@@ -1,6 +1,6 @@
 /**
  * Pathologist.js — AI-Powered Crop Disease Detection
- * Complete rebuild with working camera feed and detection
+ * Integrated with YOLOv8 + MobileNetV2 backend
  */
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -23,6 +23,7 @@ import { colors, spacing, radius, textStyle } from '../theme/tokens';
 import { useResponsive } from '../theme/responsive';
 import { speakScanInstruction, speakAnalyzing, speakDiseaseResult } from '../services/voiceService';
 import { AIButton, ChipFilterRow, Badge } from '../components/ui';
+import { BACKEND_API_URL } from '../config';
 
 // ─── Crop categories ──────────────────────────────────────────
 const CROPS = [
@@ -320,36 +321,106 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
       // Capture photo from camera
       const photo = await cameraRef.current.takePictureAsync({
         quality: 0.8,
-        base64: false,
+        base64: true,
         exif: false,
       });
 
-      // Simulate 2-second ML analysis (fully offline, no internet required)
-      await new Promise(res => setTimeout(res, 2000));
+      // Prepare FormData for multipart upload
+      const formData = new FormData();
+      formData.append('file', {
+        uri: photo.uri,
+        type: 'image/jpeg',
+        name: 'leaf_photo.jpg',
+      });
+      formData.append('farmer_id', 'MOBILE_USER');
+      formData.append('analyze_all', true);
 
-      // Local offline disease detection from captured image
-      // Select random disease from database - in production, you'd do ML inference locally
-      if (DISEASE_DB.length === 0) {
-        Alert.alert('Error', 'No diseases available for detection');
-        setAnalyzing(false);
-        return;
+      // Call backend detection API
+      const response = await fetch(`${BACKEND_API_URL}/api/diagnose`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: formData,
+        timeout: 30000, // 30 second timeout
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `API Error: ${response.status}`);
       }
 
-      const disease = DISEASE_DB[Math.floor(Math.random() * DISEASE_DB.length)];
+      const result = await response.json();
 
-      // Attach the captured image URI to the result
-      const diseaseWithImage = {
-        ...disease,
-        capturedImage: photo.uri, // Store the actual captured image for display
-        confidence: 85 + Math.random() * 15, // Simulate confidence 85-99%
-      };
+      // Map backend response to disease object format
+      let detectedDisease = null;
 
-      onDetectDisease(diseaseWithImage);
-      await speakDiseaseResult?.(disease.disease);
+      if (result.primary_disease && result.primary_confidence >= 0.3) {
+        // Use the primary disease detected
+        detectedDisease = {
+          id: result.primary_disease.toLowerCase().replace(/\s+/g, '_'),
+          disease: result.primary_disease,
+          pathogen: 'AI Detected', // Backend doesn't return this, using placeholder
+          severity: result.primary_confidence >= 0.8 ? 'High' : 
+                    result.primary_confidence >= 0.6 ? 'Moderate' : 'Mild',
+          confidence: Math.round(result.primary_confidence * 100),
+          color: result.primary_confidence >= 0.8 ? '#d32f2f' :
+                 result.primary_confidence >= 0.6 ? '#f57c00' : '#fbc02d',
+          crop: _selectedCrop,
+          capturedImage: photo.uri,
+          treatment_plan: `Detected via YOLOv8 AI Scan with ${result.detections_found} leaf detection(s). Consult local agricultural expert for specific treatment.`,
+          fertilizer: `Apply balanced fertilizer (NPK ratio based on soil test). Monitor plant health daily.`,
+          organic_alt: `Consider organic pest management and crop rotation strategies suitable for your region.`,
+          // Store backend response data
+          backendData: result,
+        };
+      } else if (result.detections_found > 0) {
+        // Fallback: Use first detected leaf's disease info
+        const firstLeaf = result.leaves[0];
+        if (firstLeaf && firstLeaf.disease) {
+          detectedDisease = {
+            id: firstLeaf.disease.disease.toLowerCase().replace(/\s+/g, '_'),
+            disease: firstLeaf.disease.disease,
+            pathogen: 'AI Detected',
+            severity: firstLeaf.composite_confidence >= 0.8 ? 'High' :
+                      firstLeaf.composite_confidence >= 0.6 ? 'Moderate' : 'Mild',
+            confidence: Math.round(firstLeaf.composite_confidence * 100),
+            color: firstLeaf.composite_confidence >= 0.8 ? '#d32f2f' :
+                   firstLeaf.composite_confidence >= 0.6 ? '#f57c00' : '#fbc02d',
+            crop: _selectedCrop,
+            capturedImage: photo.uri,
+            treatment_plan: `Leaf detected (${firstLeaf.leaf_id}). Consult local agricultural expert for specific treatment.`,
+            fertilizer: `Apply balanced fertilizer based on soil test results.`,
+            organic_alt: `Consider organic pest management strategies suitable for your region.`,
+            backendData: result,
+          };
+        }
+      }
+
+      if (detectedDisease) {
+        onDetectDisease(detectedDisease);
+        await speakDiseaseResult?.(detectedDisease.disease);
+      } else {
+        // No disease detected, show alert
+        Alert.alert(
+          'Unable to Detect Disease',
+          `Leaves detected: ${result.detections_found}\n\nPlease try:\n• Clearer image\n• Better lighting\n• Position leaf in center`
+        );
+      }
+
       onClose(); // Close camera after detection
     } catch (error) {
       console.error('Capture error:', error);
-      Alert.alert('Error', 'Failed to analyze image: ' + (error.message || 'Unknown error'));
+      
+      // Check if it's a network error
+      if (error.message.includes('Network') || error.message.includes('timeout')) {
+        Alert.alert(
+          'Backend Unavailable',
+          'AI detection requires backend connection.\n\nMake sure:\n1. Backend server is running\n2. BACKEND_API_URL in config.js is correct\n3. Network is available'
+        );
+      } else {
+        Alert.alert('Detection Error', error.message || 'Failed to analyze image');
+      }
     } finally {
       setAnalyzing(false);
     }
