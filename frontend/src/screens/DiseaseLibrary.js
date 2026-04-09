@@ -26,7 +26,7 @@ import {
   filterDiseasesByCategory,
   searchDiseases,
   getDiseaseImg,
-} from '../../assets/cropLibraryImages';
+} from '../../assets/diseaseLibraryWithLocalImages';
 
 // Category icon mapping
 const CATEGORY_ICONS = {

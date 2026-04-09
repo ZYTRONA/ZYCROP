@@ -768,9 +768,38 @@ export const getDiseasesByCategory = (category) => {
   return Object.values(DiseaseImages).filter((d) => d.category === category);
 };
 
+/**
+ * Filter diseases by category (alias for getDiseasesByCategory)
+ * @param {string} category - Category or 'all'
+ * @returns {array} Array of diseases in category
+ */
+export function filterDiseasesByCategory(category) {
+  if (!category || category === 'all') return Object.values(DiseaseImages);
+  return Object.values(DiseaseImages).filter(d => d.category === category);
+}
+
+/**
+ * Search diseases by query
+ * @param {string} query - Search query
+ * @returns {array} Array of matching diseases
+ */
+export function searchDiseases(query) {
+  if (!query || query.trim().length < 2) return Object.values(DiseaseImages);
+  const q = query.toLowerCase();
+  return Object.values(DiseaseImages).filter(d =>
+    d.name?.toLowerCase().includes(q) ||
+    d.pathogen?.toLowerCase().includes(q) ||
+    d.affects?.some(a => a.toLowerCase().includes(q)) ||
+    d.symptoms?.some(s => s.toLowerCase().includes(q)) ||
+    d.treatment?.some(t => t.toLowerCase().includes(q))
+  );
+}
+
 export default {
   DiseaseImages,
   getDiseaseImg,
   getAllDiseases,
   getDiseasesByCategory,
+  filterDiseasesByCategory,
+  searchDiseases,
 };

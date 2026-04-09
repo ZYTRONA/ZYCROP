@@ -25,7 +25,7 @@ import {
   filterDiseasesByCategory,
   searchDiseases,
   getDiseaseImg,
-} from '../../assets/cropLibraryImages';
+} from '../../assets/diseaseLibraryWithLocalImages';
 
 export default function DiseaseLibrary({ navigation }) {
   const { t } = useLang();
