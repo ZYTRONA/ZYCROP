@@ -204,6 +204,16 @@ const localImages = {
 };
 
 // ═══════════════════════════════════════════════════════════════
+//  VALIDATION LOG — Verify images are loaded
+// ═══════════════════════════════════════════════════════════════
+if (__DEV__) {
+  console.log('✅ Disease Library Images Module Loaded');
+  Object.entries(localImages).forEach(([disease, images]) => {
+    console.log(`📷 ${disease}: primary=${typeof images.primary}, ${images.images?.length || 0} variants`);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  DISEASE DATA — Complete information for all diseases
 // ═══════════════════════════════════════════════════════════════
 export const DiseaseImages = {

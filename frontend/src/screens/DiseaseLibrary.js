@@ -133,7 +133,9 @@ export default function DiseaseLibrary({ navigation }) {
           <Image
             source={getImageSource(disease.name, 'thumb')}
             style={styles.thumbnail}
+            onLoad={() => handleImageLoad(disease.name)}
             onError={() => handleImageError(disease.name)}
+            resizeMode="cover"
           />
           <View style={[styles.categoryBadge, { backgroundColor: categoryColor }]}>
             <MaterialCommunityIcons
@@ -214,7 +216,9 @@ export default function DiseaseLibrary({ navigation }) {
               <Image
                 source={getImageSource(selectedDisease.name, 'hero')}
                 style={styles.heroImage}
+                onLoad={() => handleImageLoad(selectedDisease.name)}
                 onError={() => handleImageError(selectedDisease.name)}
+                resizeMode="cover"
               />
               <View style={[styles.heroOverlay, { backgroundColor: categoryColor }]} />
             </View>
