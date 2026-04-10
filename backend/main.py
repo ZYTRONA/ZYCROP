@@ -67,7 +67,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-<<<<<<< HEAD
 # ─── YOLOv8 + Disease Detection Routes ────────────────────────────────────────
 try:
     from detection_routes import router as detection_router, initialize_pipeline, shutdown_pipeline
@@ -207,7 +206,8 @@ _DISEASE_INFO: dict[str, dict[str, str]] = {
     "cotton bollworm":        {"severity": "High",     "color": "#c62828", "treatment": "Emamectin Benzoate 5SG 0.4g/L. Install pheromone traps 5/acre.", "fertilizer": "NPK 19:19:19 foliar at 5g/L weekly during boll formation.", "organic_alt": "Bt kurstaki 2ml/L. NPV 250 LE/ha.", "timing": "Spray at boll formation, avoid flowering."},
     "apple scab":             {"severity": "Moderate", "color": "#f57c00", "treatment": "Captan 50WP 2.5g/L or Mancozeb 75WP 2g/L at green tip stage.", "fertilizer": "Balanced NPK. Calcium Nitrate 2g/L foliar post petal fall.", "organic_alt": "Lime sulfur 1% spray at pre-bloom.", "timing": "Spray at bud break; repeat every 7–10 days in wet weather."},
     "grape black rot":        {"severity": "High",     "color": "#c62828", "treatment": "Mancozeb 75WP 2g/L + Carbendazim 1g/L. Start at bud break, repeat every 10 days.", "fertilizer": "Potassium Sulphate 3g/L foliar spray monthly.", "organic_alt": "Copper Oxychloride 3g/L as protective spray.", "timing": "Critical period: bloom to 3 weeks after bloom."},
-=======
+}
+
 # ─── Test Data ───────────────────────────────────────────────────────────
 MARKET_DATA_CACHE: MarketCacheDict = {
     "Rice": {
@@ -244,7 +244,6 @@ MARKET_DATA_CACHE: MarketCacheDict = {
         "source": "agmarknet_api",
         "updated_at": datetime.now().isoformat()
     }
->>>>>>> 078747ca9c42df5f648c3d864c0ff984cee06123
 }
 
 # ─── API Endpoints ───────────────────────────────────────────
