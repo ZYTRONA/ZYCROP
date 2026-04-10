@@ -3,7 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
   Modal, ScrollView,
 } from 'react-native'
-import { CheckCircle } from 'lucide-react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useLang, LANGUAGES } from '../context/LanguageContext'
 
 /**
@@ -78,7 +78,7 @@ export default function LanguageMenu({ iconColor = 'white' }) {
                     </Text>
                     <Text style={S.english}>{l.label}</Text>
                   </View>
-                  {active && <CheckCircle color="#1b5e20" size={22} />}
+                  {active && <MaterialCommunityIcons name="check-circle" color="#1b5e20" size={22} />}
                   {!active && <View style={S.radioOuter} />}
                 </TouchableOpacity>
               )

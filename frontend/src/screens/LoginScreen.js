@@ -18,7 +18,6 @@ import {
   ImageBackground,
 } from 'react-native'
 import * as LocalAuthentication from 'expo-local-authentication'
-import { Phone } from 'lucide-react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useLang } from '../context/LanguageContext'
 import { AIButton, Badge } from '../components/ui'
@@ -166,7 +165,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.section}>
           <Text style={styles.inputLabel}>Phone Number</Text>
           <View style={styles.phoneInputWrap}>
-            <Phone size={18} color={COLORS.textMuted} />
+            <MaterialCommunityIcons name="phone" size={18} color={COLORS.textMuted} />
             <TextInput
               placeholder="+91 XXXXX XXXXX"
               placeholderTextColor={COLORS.textMuted}

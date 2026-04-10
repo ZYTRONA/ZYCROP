@@ -11,7 +11,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView,
   TextInput, Animated, Keyboard, KeyboardAvoidingView, Platform,
 } from 'react-native'
-import { Audio } from 'expo-av'
+import * as AudioModule from 'expo-audio'
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons'
 import { useLang } from '../context/LanguageContext'
 import { speak, stopSpeaking, speakDashboardGreeting } from '../services/voiceService'
@@ -20,7 +20,7 @@ import { chatWithGPT } from '../services/openaiService'
 import { OPENAI_API_KEY } from '../config'
 
 /** @type {any} */
-const AudioLib = Audio
+const Audio = AudioModule
 
 // ─── Comprehensive Farming Knowledge Base ────────────────────────────────────
 const KB = [
@@ -382,7 +382,7 @@ export default function VoiceBot({ onNavigate, style }) {
 
   const requestMicPerm = async () => {
     try {
-      const { granted } = await AudioLib.requestPermissionsAsync()
+      const { granted } = await Audio.requestRecordingPermissionsAsync()
       setHasMicPerm(granted)
       return granted
     } catch { return false }
@@ -462,7 +462,7 @@ export default function VoiceBot({ onNavigate, style }) {
     }
     try {
       await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
-      const { recording } = await AudioLib.Recording.createAsync({
+      const { recording } = await Audio.Recording.createAsync({
         android: { extension: '.m4a', outputFormat: 2, audioEncoder: 3, sampleRate: 16000, numberOfChannels: 1, bitRate: 64000 },
         ios: { extension: '.m4a', audioQuality: 0x7f, sampleRate: 16000, numberOfChannels: 1, bitRate: 64000, linearPCMBitDepth: 16, linearPCMIsBigEndian: false, linearPCMIsFloat: false },
         web: {},

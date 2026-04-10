@@ -17,7 +17,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   StatusBar, ActivityIndicator, RefreshControl, TextInput,
-  Animated, LayoutAnimation, Platform, UIManager, Modal,
+  Animated, LayoutAnimation, Modal,
   FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,11 +27,6 @@ import { useResponsive } from '../theme/responsive';
 import { colors, spacing, radius, textStyle, shadow } from '../theme/tokens';
 import { AIButton, ChipFilterRow, StatBox, Badge } from '../components/ui';
 import { getMarketComparison, setPriceAlert } from '../services/api';
-
-// Enable layout animations on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 // ─── Enhanced Market Data with Categories, Locations, and AI Signals ──────
 const MARKET_DATA = [

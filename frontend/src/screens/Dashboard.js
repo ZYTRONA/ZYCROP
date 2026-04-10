@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLang } from '../context/LanguageContext';
 import { VoiceFAB } from '../components/ui';
+import VoiceBot from '../components/VoiceBot';
 import { speak } from '../services/voiceService';
 
 
@@ -266,6 +267,7 @@ export default function Dashboard({ navigation }) {
   // ── Phase 3 Enhancements ───
   const [voiceState, setVoiceState] = useState('idle'); // 'idle' | 'recording' | 'processing'
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [showVoiceBot, setShowVoiceBot] = useState(false); // Show/hide VoiceBot modal
   const [_farmLocked, _setFarmLocked] = useState(false);
 
   useEffect(() => {
@@ -281,6 +283,30 @@ export default function Dashboard({ navigation }) {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 1500);
   }, []);
+
+  // Handle VoiceBot navigation to different screens
+  const handleVoiceBotNavigate = useCallback((screenName) => {
+    setShowVoiceBot(false);
+    setTimeout(() => {
+      if (screenName === 'SoilLab') {
+        navigation.navigate('SoilLab');
+      } else if (screenName === 'Market') {
+        navigation.navigate('Market');
+      } else if (screenName === 'AI Scan') {
+        navigation.navigate('Pathologist');
+      } else if (screenName === 'GovSchemes') {
+        navigation.navigate('GovSchemes');
+      } else if (screenName === 'Loans') {
+        navigation.navigate('Loans');
+      } else if (screenName === 'FarmPassport') {
+        navigation.navigate('FarmPassport');
+      } else if (screenName === 'Library') {
+        navigation.navigate('Library');
+      } else if (screenName === 'Calendar') {
+        navigation.navigate('Calendar');
+      }
+    }, 300);
+  }, [navigation]);
 
   const features = makeFeatures(navigation);
 
@@ -458,20 +484,25 @@ export default function Dashboard({ navigation }) {
       <VoiceFAB
         state={voiceState}
         onPress={() => {
-          // Toggle voice input
-          if (voiceState === 'idle') {
-            setVoiceState('recording');
-            // Start recording logic here
-          } else if (voiceState === 'recording') {
-            setVoiceState('processing');
-            // End recording + process
-          } else {
-            setVoiceState('idle');
-          }
+          setShowVoiceBot(true);
+          setVoiceState('idle');
         }}
         onLanguagePress={() => setShowLanguageMenu(true)}
         currentLanguage={currentLanguage}
       />
+
+      {/* ── VOICEBOT MODAL ───────────────────────────────── */}
+      <Modal
+        visible={showVoiceBot}
+        animationType="slide"
+        transparent={false}
+        onRequestClose={() => setShowVoiceBot(false)}
+      >
+        <VoiceBot
+          onNavigate={handleVoiceBotNavigate}
+          style={{ flex: 1 }}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }
