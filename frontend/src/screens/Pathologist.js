@@ -157,7 +157,9 @@ const DISEASE_DB = [
 
 // ─── Disease Result Modal Component ────────────────────────────────────
 function DiseaseResultModal({ visible, disease, onClose, t }) {
+  const { lang } = useLang();
   const { spacing: sp } = useResponsive();
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   if (!disease) return null;
 
@@ -165,6 +167,12 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
     disease.severity === 'Severe' ? 'danger' :
     disease.severity === 'High' ? 'warning' :
     disease.severity === 'Moderate' ? 'warning' : 'info';
+
+  const handleReadDiagnosis = () => {
+    setIsSpeaking(true);
+    speakDiseaseResult(disease.disease, disease.severity, lang);
+    setTimeout(() => setIsSpeaking(false), 3000); // Approximate duration
+  };
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -211,6 +219,25 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
             <Text style={[textStyle.bodySmall(), { marginTop: sp.sm, color: '#4A4A4A', fontWeight: '500' }]}>
               ✓ {Math.round(disease.confidence)}% Confidence Match
             </Text>
+
+            {/* Voice Readout Button */}
+            <TouchableOpacity
+              onPress={handleReadDiagnosis}
+              disabled={isSpeaking}
+              style={[
+                styles.voiceButton,
+                { marginTop: sp.md, backgroundColor: isSpeaking ? colors.primary + '80' : colors.primary, opacity: isSpeaking ? 0.6 : 1 }
+              ]}
+            >
+              <MaterialCommunityIcons
+                name={isSpeaking ? 'volume-high' : 'volume-2'}
+                size={18}
+                color="#fff"
+              />
+              <Text style={{ color: '#fff', fontWeight: '600', marginLeft: sp.sm }}>
+                {isSpeaking ? 'Reading...' : '🔊 Hear Diagnosis'}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Quick Info Grid */}
@@ -951,5 +978,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
     paddingBottom: spacing.xl,
+  },
+  voiceButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.primary,
   },
 });

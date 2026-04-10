@@ -3,7 +3,7 @@
  * Complete disease database with images, symptoms, treatment, and prevention
  * ENHANCED: Better visual design, improved UX, complete information display
  */
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,9 @@ import {
   Image,
   FlatList,
   Modal,
+  Animated,
+  Easing,
+  InteractionManager,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,6 +29,7 @@ import {
   filterDiseasesByCategory,
   searchDiseases,
   getDiseaseImg,
+  localImages,
 } from '../../assets/diseaseLibraryWithLocalImages';
 
 // Category icon mapping
@@ -54,23 +58,20 @@ export default function DiseaseLibrary({ navigation }) {
   const [selectedDisease, setSelectedDisease] = useState(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
-  // Handle image load errors with detailed logging
   const handleImageError = (imageName) => {
-    console.error(`📷 Image failed to load for disease: ${imageName}`);
+    // Error handler
   };
 
   const handleImageLoad = (imageName) => {
-    console.log(`✅ Image loaded successfully for: ${imageName}`);
+    // Image loaded
   };
 
   // Get image with fallback
   const getImageSource = (imageName, sizeType = 'thumb') => {
     try {
       const img = getDiseaseImg(imageName, sizeType);
-      console.log(`🖼️ Getting image for ${imageName} (${sizeType}):`, typeof img, img);
       return img;
     } catch (error) {
-      console.error(`Error getting image source for ${imageName}:`, error);
       return require('../../assets/disease_library/leaf blight/rice leaf blight.webp');
     }
   };
@@ -114,10 +115,79 @@ export default function DiseaseLibrary({ navigation }) {
   }, []);
 
   // ────────────────────────────────────────
-  // LIST ITEM COMPONENT (Enhanced)
+  // AUTO-ROTATING IMAGE CAROUSEL FOR LIST
   // ────────────────────────────────────────
-  const DiseaseListItem = ({ disease }) => {
+  const RotatingImageCarousel = ({ diseaseName }) => {
+    const [currentImageIdx, setCurrentImageIdx] = useState(0);
+    
+    // Get all images for this disease from localImages
+    const diseaseImages = (localImages && localImages[diseaseName] && localImages[diseaseName].images) 
+      ? localImages[diseaseName].images 
+      : [];
+
+    // Auto-rotate every 5 seconds
+    useEffect(() => {
+      if (!diseaseImages || diseaseImages.length === 0) return;
+
+      const interval = setInterval(() => {
+        setCurrentImageIdx((prevIdx) => (prevIdx + 1) % diseaseImages.length);
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }, [diseaseImages.length]);
+
+    if (!diseaseImages || diseaseImages.length === 0) {
+      return getImageSource(diseaseName, 'thumb');
+    }
+
+    return diseaseImages[currentImageIdx]?.file || getImageSource(diseaseName, 'thumb');
+  };
+
+  // ────────────────────────────────────────
+  // LIST ITEM COMPONENT (Enhanced with rotating carousel)
+  // ────────────────────────────────────────
+  const DiseaseListItemBase = ({ disease }) => {
     const categoryColor = CATEGORY_COLORS[disease.category] || colors.primary;
+    const [currentImageIdx, setCurrentImageIdx] = useState(0);
+    const overlayOpacity = useMemo(() => new Animated.Value(0), []);
+    const [nextImageFile, setNextImageFile] = useState(null);
+
+    // Get all images for this disease
+    const diseaseImages = useMemo(() => {
+      return (localImages && localImages[disease.name] && localImages[disease.name].images) 
+        ? localImages[disease.name].images 
+        : [];
+    }, [disease.name]);
+
+    // Auto-rotate carousel every 5 seconds with ultra-smooth 100ms crossfade
+    useEffect(() => {
+      if (!diseaseImages || diseaseImages.length === 0) return;
+
+      const interval = setInterval(() => {
+        InteractionManager.runAfterInteractions(() => {
+          const nextIdx = (currentImageIdx + 1) % diseaseImages.length;
+          setNextImageFile(diseaseImages[nextIdx]?.file);
+
+          // Ultra-smooth crossfade: 100ms for snappy, responsive feel
+          Animated.timing(overlayOpacity, {
+            toValue: 1,
+            duration: 100,
+            easing: Easing.ease,
+            useNativeDriver: true,
+          }).start(() => {
+            setCurrentImageIdx(nextIdx);
+            overlayOpacity.setValue(0);
+            setNextImageFile(null);
+          });
+        });
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }, [currentImageIdx, diseaseImages.length, overlayOpacity]);
+
+    const currentImage = diseaseImages && diseaseImages.length > 0 
+      ? diseaseImages[currentImageIdx]?.file 
+      : getImageSource(disease.name, 'thumb');
 
     return (
       <TouchableOpacity
@@ -130,13 +200,22 @@ export default function DiseaseLibrary({ navigation }) {
 
         {/* Thumbnail image with category badge */}
         <View style={styles.imageContainer}>
+          {/* Base image */}
           <Image
-            source={getImageSource(disease.name, 'thumb')}
+            source={currentImage}
             style={styles.thumbnail}
             onLoad={() => handleImageLoad(disease.name)}
             onError={() => handleImageError(disease.name)}
             resizeMode="cover"
           />
+          {/* Overlay image for crossfade */}
+          {nextImageFile && (
+            <Animated.Image
+              source={nextImageFile}
+              style={[styles.thumbnail, styles.imageOverlay, { opacity: overlayOpacity }]}
+              resizeMode="cover"
+            />
+          )}
           <View style={[styles.categoryBadge, { backgroundColor: categoryColor }]}>
             <MaterialCommunityIcons
               name={CATEGORY_ICONS[disease.category] || 'alert-circle'}
@@ -168,7 +247,7 @@ export default function DiseaseLibrary({ navigation }) {
             )}
           </View>
 
-          {/* Severity badge - improved */}
+          {/* Severity badge */}
           <Badge
             label={disease.severity}
             variant={
@@ -184,6 +263,126 @@ export default function DiseaseLibrary({ navigation }) {
     );
   };
 
+  // Memoize to prevent unnecessary re-renders
+  const DiseaseListItem = React.memo(DiseaseListItemBase);
+
+  // ────────────────────────────────────────
+  // HERO IMAGE COMPONENT (Isolated, Memoized)
+  // ────────────────────────────────────────
+  const HeroImageSection = React.memo(({ image, categoryColor, diseaseName }) => {
+    const heroFadeAnim = useState(new Animated.Value(1))[0];
+
+    useEffect(() => {
+      InteractionManager.runAfterInteractions(() => {
+        Animated.parallel([
+          Animated.timing(heroFadeAnim, {
+            toValue: 0,
+            duration: 120,
+            easing: Easing.ease,
+            useNativeDriver: true,
+          }),
+          Animated.timing(heroFadeAnim, {
+            toValue: 1,
+            duration: 120,
+            easing: Easing.ease,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      });
+    }, [image, heroFadeAnim]);
+
+    return (
+      <View style={styles.heroImageContainer}>
+        <Animated.Image
+          source={image}
+          style={[styles.heroImage, { opacity: heroFadeAnim }]}
+          onLoad={() => handleImageLoad(diseaseName)}
+          onError={() => handleImageError(diseaseName)}
+          resizeMode="cover"
+        />
+        <View style={[styles.heroOverlay, { backgroundColor: categoryColor }]} />
+      </View>
+    );
+  });
+
+  // ────────────────────────────────────────
+  // CROP SYSTEM WRAPPER (Completely Isolated)
+  // ────────────────────────────────────────
+  const CropSystemWrapper = React.memo(({ diseaseName, cropImages, categoryColor }) => {
+    // STATE LIVES HERE - completely isolated
+    const [selectedCrop, setSelectedCrop] = useState(
+      cropImages && cropImages.length > 0 ? cropImages[0].crop : null
+    );
+
+    // Get image for selected crop
+    const selectedCropImage = useMemo(() => {
+      return cropImages && cropImages.length > 0 && selectedCrop
+        ? (cropImages.find(img => img.crop === selectedCrop)?.file || cropImages[0].file)
+        : getImageSource(diseaseName, 'hero');
+    }, [cropImages, selectedCrop, diseaseName]);
+
+    return (
+      <>
+        <HeroImageSection 
+          image={selectedCropImage} 
+          categoryColor={categoryColor}
+          diseaseName={diseaseName}
+        />
+        {cropImages && cropImages.length > 0 && (
+          <CropSelectionSection 
+            cropImages={cropImages}
+            currentCrop={selectedCrop}
+            onCropChange={setSelectedCrop}
+          />
+        )}
+      </>
+    );
+  });
+
+  // ────────────────────────────────────────
+  // CROP SELECTION COMPONENT (Isolated, Memoized)
+  // ────────────────────────────────────────
+  const CropSelectionSection = React.memo(({ cropImages, currentCrop, onCropChange }) => {
+    return (
+      <View style={[styles.section, { paddingHorizontal: sp.lg, paddingTop: sp.lg }]}>
+        <View style={styles.sectionHeader}>
+          <MaterialCommunityIcons name="leaf" size={20} color={colors.accent} />
+          <Text style={[textStyle.h3(), { marginLeft: sp.md, fontWeight: '600', color: colors.textPrimary }]}>
+            View by Crop
+          </Text>
+        </View>
+        <View style={styles.cropSelectionContainer}>
+          {cropImages.map((item, idx) => (
+            <TouchableOpacity
+              key={idx}
+              style={[
+                styles.cropChip,
+                currentCrop === item.crop && styles.cropChipSelected,
+              ]}
+              onPress={() => onCropChange(item.crop)}
+              activeOpacity={0.6}
+            >
+              <Text
+                style={[
+                  textStyle.bodySmall(),
+                  {
+                    color: currentCrop === item.crop ? colors.primary : colors.textPrimary,
+                    fontWeight: currentCrop === item.crop ? '700' : '500',
+                  },
+                ]}
+              >
+                {item.crop}
+              </Text>
+              {currentCrop === item.crop && (
+                <MaterialCommunityIcons name="check-circle" size={16} color={colors.primary} style={{ marginLeft: sp.xs }} />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    );
+  });
+
   // ────────────────────────────────────────
   // DETAIL MODAL COMPONENT (Enhanced)
   // ────────────────────────────────────────
@@ -191,6 +390,13 @@ export default function DiseaseLibrary({ navigation }) {
     if (!selectedDisease) return null;
 
     const categoryColor = CATEGORY_COLORS[selectedDisease.category] || colors.primary;
+    
+    // Memoize crop images to prevent unnecessary recalculations
+    const cropImages = useMemo(() => {
+      return (localImages && localImages[selectedDisease.name] && localImages[selectedDisease.name].images)
+        ? localImages[selectedDisease.name].images
+        : [];
+    }, [selectedDisease.name]);
 
     return (
       <Modal visible={detailModalVisible} animationType="slide" transparent>
@@ -210,18 +416,13 @@ export default function DiseaseLibrary({ navigation }) {
             <View style={{ width: 24 }} />
           </View>
 
-          <ScrollView style={styles.detailScroll}>
-            {/* Hero image */}
-            <View style={styles.heroImageContainer}>
-              <Image
-                source={getImageSource(selectedDisease.name, 'hero')}
-                style={styles.heroImage}
-                onLoad={() => handleImageLoad(selectedDisease.name)}
-                onError={() => handleImageError(selectedDisease.name)}
-                resizeMode="cover"
-              />
-              <View style={[styles.heroOverlay, { backgroundColor: categoryColor }]} />
-            </View>
+          <ScrollView style={styles.detailScroll} scrollEventThrottle={16}>
+            {/* CROP SYSTEM - Completely Isolated (NO parent re-render) */}
+            <CropSystemWrapper 
+              diseaseName={selectedDisease.name}
+              cropImages={cropImages}
+              categoryColor={categoryColor}
+            />
 
             {/* Disease Title & Basics Section */}
             <View style={[styles.section, { paddingHorizontal: sp.lg, paddingTop: sp.lg }]}>
@@ -502,6 +703,11 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     backgroundColor: '#f0f0f0',
   },
+  imageOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
   categoryBadge: {
     position: 'absolute',
     top: 4,
@@ -584,6 +790,27 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
     borderWidth: 1,
     borderColor: colors.primary + '30',
+  },
+  cropSelectionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+    marginTop: spacing.md,
+  },
+  cropChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    backgroundColor: '#f5f5f5',
+    borderRadius: radius.full,
+    borderWidth: 1.5,
+    borderColor: '#e0e0e0',
+  },
+  cropChipSelected: {
+    backgroundColor: colors.primary + '20',
+    borderColor: colors.primary,
+    borderWidth: 2,
   },
   bulletPoint: {
     flexDirection: 'row',

@@ -1,6 +1,7 @@
 /**
  * LoanAdvisor.js — AI Loan & Finance Advisor
  * Real-time chat with Ollama AI for KCC, NABARD, interest calculations
+ * Now with voice readout for AI responses!
  */
 import React, { useState, useRef, useCallback } from 'react';
 import {
@@ -11,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLang } from '../context/LanguageContext';
+import { VoiceChatBubble } from '../components/ui';
 import { colors, spacing, radius, textStyle } from '../theme/tokens';
 import { useResponsive } from '../theme/responsive';
 import { translations } from '../constants/translations';
@@ -65,49 +67,32 @@ const OFFLINE_AI = (msg, t) => {
   return t.loan_advisor_default;
 };
 
-function ChatBubble({ msg }) {
-  const isUser = msg.role === 'user';
-
-  // Parse basic markdown: **bold**, bullet points
-  const formatText = (text) => {
-    return text.split('\n').map((line, i) => {
-      const isBullet = line.trim().startsWith('•') || line.trim().startsWith('-');
-      const isBold = line.includes('**');
-      const parts = line.split('**');
-      return (
-        <Text key={i} style={[
-          cb.msgText,
-          { color: isUser ? '#fff' : colors.textPrimary },
-          isBullet && { paddingLeft: 8 },
-          !isUser && { fontSize: 13, lineHeight: 20 },
-        ]}>
-          {isBold ? parts.map((p, j) => (
-            <Text key={j} style={j % 2 === 1 ? { fontWeight: '800' } : {}}>{p}</Text>
-          )) : line}
-          {'\n'}
-        </Text>
-      );
-    });
-  };
-
+function UserChatBubble({ msg, lang }) {
+  // User messages rendered as simple bubbles (no voice needed)
   return (
-    <View style={[cb.wrap, isUser ? cb.userWrap : cb.aiWrap]}>
-      {!isUser && (
-        <View style={cb.avatar}>
-          <MaterialCommunityIcons name="robot-outline" size={16} color="#fff" />
-        </View>
-      )}
-      <View style={[cb.bubble, isUser ? cb.userBubble : cb.aiBubble]}>
-        {formatText(msg.text)}
+    <View style={[cb.wrap, cb.userWrap]}>
+      <View style={[cb.bubble, cb.userBubble]}>
+        <Text style={[cb.msgText, { color: '#fff' }]}>{msg.text}</Text>
       </View>
-      {isUser && (
-        <View style={[cb.avatar, { backgroundColor: colors.border }]}>
-          <Feather name="user" size={16} color={colors.textMuted} />
-        </View>
-      )}
+      <View style={[cb.avatar, { backgroundColor: colors.border }]}>
+        <Feather name="user" size={16} color={colors.textMuted} />
+      </View>
     </View>
   );
 }
+
+function AIMessageWithVoice({ msg, lang }) {
+  // AI messages with voice readout button
+  return (
+    <VoiceChatBubble
+      role="ai"
+      text={msg.text}
+      lang={lang}
+      enableVoice={true}
+    />
+  );
+}
+
 const cb = StyleSheet.create({
   wrap: { flexDirection: 'row', alignItems: 'flex-end', marginBottom: spacing.md, gap: spacing.sm },
   userWrap: { justifyContent: 'flex-end' },
@@ -196,7 +181,13 @@ export default function LoanAdvisor({ navigation }) {
           contentContainerStyle={{ padding: sp.md, paddingBottom: 20 }}
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
         >
-          {messages.map((msg, i) => <ChatBubble key={i} msg={msg} />)}
+          {messages.map((msg, i) =>
+            msg.role === 'user' ? (
+              <UserChatBubble key={i} msg={msg} lang={lang} />
+            ) : (
+              <AIMessageWithVoice key={i} msg={msg} lang={lang} />
+            )
+          )}
           {typing && (
             <View style={[cb.wrap, cb.aiWrap]}>
               <View style={cb.avatar}>
