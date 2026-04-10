@@ -255,7 +255,7 @@ export default function SoilLab({ navigation }) {
           <Feather name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: sp.md }}>
-          <Text style={[textStyle.h2({ color: '#fff' })]}>Soil Analysis Lab</Text>
+          <Text style={[textStyle.h2({ color: '#fff' })]}>{t.soilAnalysisLab}</Text>
           <Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 }}>AI-powered NPK diagnostics</Text>
         </View>
         <MaterialCommunityIcons name="flask" size={24} color="#fff" />

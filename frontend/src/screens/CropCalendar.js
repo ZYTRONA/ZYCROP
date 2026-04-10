@@ -288,7 +288,7 @@ export default function CropCalendar({ navigation }) {
           <Feather name="arrow-left" size={22} color="#fff" />
         </TouchableOpacity>
         <View style={s.headerTitle}>
-          <Text style={[textStyle.h2({ color: '#fff' })]}>Crop Calendar</Text>
+          <Text style={[textStyle.h2({ color: '#fff' })]}>{t.calendar_title}</Text>
           <Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, marginTop: 2 }}>
             Full agronomic schedule · {CROPS.length} crops
           </Text>
@@ -314,18 +314,18 @@ export default function CropCalendar({ navigation }) {
             <Text style={[textStyle.bodySmall(), { color: colors.textMuted }]}>{crop.season}</Text>
           </View>
           <View>
-            <Text style={[textStyle.bodySmall(), { color: colors.textMuted, textAlign: 'right' }]}>Yield target</Text>
+            <Text style={[textStyle.bodySmall(), { color: colors.textMuted, textAlign: 'right' }]}>{t.yieldTarget}</Text>
             <Text style={[textStyle.body(), { fontWeight: '700', color: crop.color, textAlign: 'right' }]}>{crop.yield}</Text>
           </View>
         </View>
 
         <View style={{ paddingHorizontal: spacing.md }}>
           {/* Quick info */}
-          <Text style={[textStyle.h3(), s.sectionLabel]}>Crop Overview</Text>
+          <Text style={[textStyle.h3(), s.sectionLabel]}>{t.cropOverview}</Text>
           <CropInfoCard crop={crop} />
 
           {/* Schedule */}
-          <Text style={[textStyle.h3(), s.sectionLabel]}>Cultivation Schedule</Text>
+          <Text style={[textStyle.h3(), s.sectionLabel]}>{t.cultivationSchedule}</Text>
           {crop.schedule.map((task, i) => <TaskCard key={i} task={task} />)}
 
           {/* Pest threats */}

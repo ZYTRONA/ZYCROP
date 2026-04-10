@@ -295,7 +295,7 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
 }
 
 // ─── Camera Screen Component ────────────────────────────────────
-function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
+function CameraScreen({ onClose, _selectedCrop, onDetectDisease, t }) {
   const [permission, requestPermission] = ExpoCamera.useCameraPermissions();
   const [analyzing, setAnalyzing] = useState(false);
   const cameraRef = useRef(null);
@@ -521,6 +521,7 @@ export default function Pathologist({ navigation }) {
           setResultModalVisible(true);
           setShowCamera(false);
         }}
+        t={t}
       />
     );
   }
@@ -535,14 +536,14 @@ export default function Pathologist({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Feather name="arrow-left" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={textStyle.h1()}>AI Disease Scan</Text>
+          <Text style={textStyle.h1()}>{t.pathTitle}</Text>
           <View style={{ width: 24 }} />
         </View>
 
         {/* Crop Selector */}
         <View style={styles.cropSelectorSection}>
           <Text style={[textStyle.body(), { marginBottom: sp.sm, marginLeft: sp.md, fontWeight: '600' }]}>
-            Select Crop
+            {t.selectCrop}
           </Text>
           <ChipFilterRow
             items={CROPS}
@@ -558,10 +559,10 @@ export default function Pathologist({ navigation }) {
             <MaterialCommunityIcons name="leaf" size={52} color={colors.primary} />
           </View>
           <Text style={[textStyle.h2(), { marginTop: sp.md, textAlign: 'center' }]}>
-            Identify Disease
+            {t.diseaseDetected}
           </Text>
           <Text style={[textStyle.bodySmall(), { marginTop: sp.sm, textAlign: 'center', color: '#666' }]}>
-            Point your camera at a damaged leaf to detect diseases instantly
+            {t.cameraTextPath}
           </Text>
 
           <View style={styles.featureGrid}>
@@ -627,7 +628,7 @@ export default function Pathologist({ navigation }) {
           onPress={() => navigation.navigate('DiseaseLibrary')}
         >
           <MaterialCommunityIcons name="book-open-page-variant" size={20} color={colors.primary} />
-          <Text style={[styles.btnText, { color: colors.primary }]}>Disease Library</Text>
+          <Text style={[styles.btnText, { color: colors.primary }]}>{t.libraryTitle}</Text>
         </TouchableOpacity>
       </View>
 
