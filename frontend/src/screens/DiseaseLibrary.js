@@ -25,6 +25,7 @@ import { useLang } from '../context/LanguageContext';
 import { useResponsive } from '../theme/responsive';
 import { colors, spacing, radius, shadow, textStyle } from '../theme/tokens';
 import { ChipFilterRow, Badge, EmptyState } from '../components/ui';
+import { translateDiseaseContent } from '../services/contentTranslator';
 import {
   filterDiseasesByCategory,
   searchDiseases,
@@ -50,7 +51,7 @@ const CATEGORY_COLORS = {
 };
 
 export default function DiseaseLibrary({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { spacing: sp } = useResponsive();
 
   const [searchText, setSearchText] = useState('');
@@ -61,6 +62,12 @@ export default function DiseaseLibrary({ navigation }) {
   const handleImageError = (imageName) => {
     // Error handler
   };
+
+  // Translate disease content based on selected language
+  const translatedDisease = useMemo(() => {
+    if (!selectedDisease) return null;
+    return translateDiseaseContent(selectedDisease, lang);
+  }, [selectedDisease, lang]);
 
   const handleImageLoad = (imageName) => {
     // Image loaded
@@ -427,7 +434,7 @@ export default function DiseaseLibrary({ navigation }) {
             {/* Disease Title & Basics Section */}
             <View style={[styles.section, { paddingHorizontal: sp.lg, paddingTop: sp.lg }]}>
               <Text style={[textStyle.h2(), { marginBottom: sp.md, color: colors.textPrimary, fontWeight: '700' }]}>
-                {selectedDisease.name}
+                {translatedDisease.name}
               </Text>
 
               <View style={styles.infoGrid}>
@@ -488,16 +495,16 @@ export default function DiseaseLibrary({ navigation }) {
             )}
 
             {/* Symptoms */}
-            {selectedDisease.symptoms && selectedDisease.symptoms.length > 0 && (
+            {translatedDisease.symptoms && translatedDisease.symptoms.length > 0 && (
               <View style={[styles.section, { paddingHorizontal: sp.lg }]}>
                 <View style={styles.sectionHeader}>
                   <MaterialCommunityIcons name="check-circle-outline" size={20} color={colors.primary} />
                   <Text style={[textStyle.h3(), { marginLeft: sp.md, fontWeight: '600', color: colors.textPrimary }]}>
-                    Symptoms
+                    {t['symptoms'] || 'Symptoms'}
                   </Text>
                 </View>
                 <View style={{ marginTop: sp.md }}>
-                  {selectedDisease.symptoms.map((symptom, idx) => (
+                  {translatedDisease.symptoms.map((symptom, idx) => (
                     <View key={idx} style={styles.bulletPoint}>
                       <View style={styles.bulletMarker} />
                       <Text style={[textStyle.body(), { flex: 1, color: colors.textPrimary }]}>
@@ -510,17 +517,17 @@ export default function DiseaseLibrary({ navigation }) {
             )}
 
             {/* Treatment */}
-            {selectedDisease.treatment && selectedDisease.treatment.length > 0 && (
+            {translatedDisease.treatment && translatedDisease.treatment.length > 0 && (
               <View style={[styles.section, { paddingHorizontal: sp.lg }]}>
                 <View style={styles.sectionHeader}>
                   <MaterialCommunityIcons name="spray-bottle" size={20} color={colors.primary} />
                   <Text style={[textStyle.h3(), { marginLeft: sp.md, fontWeight: '600', color: colors.textPrimary }]}>
-                    Treatment
+                    {t['treatment'] || 'Treatment'}
                   </Text>
                 </View>
                 <View style={[styles.contentBox, { borderLeftColor: colors.primary, backgroundColor: '#F8FAFC', marginTop: sp.md }]}>
-                  {selectedDisease.treatment.map((treat, idx) => (
-                    <View key={idx} style={[styles.bulletPoint, { marginBottom: idx < selectedDisease.treatment.length - 1 ? sp.md : 0 }]}>
+                  {translatedDisease.treatment.map((treat, idx) => (
+                    <View key={idx} style={[styles.bulletPoint, { marginBottom: idx < translatedDisease.treatment.length - 1 ? sp.md : 0 }]}>
                       <MaterialCommunityIcons name="check" size={16} color={colors.primary} />
                       <Text style={[textStyle.body(), { flex: 1, marginLeft: sp.sm, color: colors.textPrimary }]}>
                         {treat}
@@ -532,17 +539,17 @@ export default function DiseaseLibrary({ navigation }) {
             )}
 
             {/* Prevention */}
-            {selectedDisease.prevention && selectedDisease.prevention.length > 0 && (
+            {translatedDisease.prevention && translatedDisease.prevention.length > 0 && (
               <View style={[styles.section, { paddingHorizontal: sp.lg }]}>
                 <View style={styles.sectionHeader}>
                   <MaterialCommunityIcons name="shield-check" size={20} color={colors.accent} />
                   <Text style={[textStyle.h3(), { marginLeft: sp.md, fontWeight: '600', color: colors.textPrimary }]}>
-                    Prevention
+                    {t['prevention'] || 'Prevention'}
                   </Text>
                 </View>
                 <View style={[styles.contentBox, { borderLeftColor: colors.accent, backgroundColor: '#F0FDF4', marginTop: sp.md }]}>
-                  {selectedDisease.prevention.map((prev, idx) => (
-                    <View key={idx} style={[styles.bulletPoint, { marginBottom: idx < selectedDisease.prevention.length - 1 ? sp.md : 0 }]}>
+                  {translatedDisease.prevention.map((prev, idx) => (
+                    <View key={idx} style={[styles.bulletPoint, { marginBottom: idx < translatedDisease.prevention.length - 1 ? sp.md : 0 }]}>
                       <MaterialCommunityIcons name="check" size={16} color={colors.accent} />
                       <Text style={[textStyle.body(), { flex: 1, marginLeft: sp.sm, color: colors.textPrimary }]}>
                         {prev}
@@ -554,17 +561,17 @@ export default function DiseaseLibrary({ navigation }) {
             )}
 
             {/* Dosage */}
-            {selectedDisease.dosage && (
+            {translatedDisease.dosage && (
               <View style={[styles.section, { paddingHorizontal: sp.lg, marginBottom: sp.xl }]}>
                 <View style={styles.sectionHeader}>
                   <MaterialCommunityIcons name="flask-outline" size={20} color="#8B4513" />
                   <Text style={[textStyle.h3(), { marginLeft: sp.md, fontWeight: '600', color: colors.textPrimary }]}>
-                    Dosage & Application
+                    {t['dosage'] || 'Dosage & Application'}
                   </Text>
                 </View>
                 <View style={[styles.contentBox, { borderLeftColor: '#8B4513', backgroundColor: '#FFF8DC', marginTop: sp.md }]}>
                   <Text style={[textStyle.body(), { color: colors.textPrimary, lineHeight: 24 }]}>
-                    {selectedDisease.dosage}
+                    {translatedDisease.dosage}
                   </Text>
                 </View>
               </View>

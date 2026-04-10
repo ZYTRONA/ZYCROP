@@ -164,7 +164,7 @@ const sc = StyleSheet.create({
 });
 
 export default function GovSchemes({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { spacing: sp } = useResponsive();
   const [searchText, setSearchText] = useState('');
   const [schemes, setSchemes] = useState(DEMO_SCHEMES);

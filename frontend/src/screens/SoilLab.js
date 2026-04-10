@@ -221,7 +221,7 @@ const src = StyleSheet.create({
 });
 
 export default function SoilLab({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { spacing: sp } = useResponsive();
 
   const [N, setN]         = useState('');

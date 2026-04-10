@@ -934,7 +934,7 @@ function SetAlertModal({ visible, onClose, crop, t }) {
 
 // ─── Main Component ──────────────────────────────────────────
 export default function MarketAI({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const responsive = useResponsive();
 
   // Main state

@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, spacing, radius, textStyle } from '../theme/tokens';
 import { ChipFilterRow, Badge } from '../components/ui';
+import { useLang } from '../context/LanguageContext';
+import { getTranslatedCropName } from '../services/contentTranslator';
 
 // ─── Full 15-Crop Dataset (India's Major Crops) ────────────────────────────────
 const CROPS = [
@@ -361,6 +363,7 @@ const ps = StyleSheet.create({
 // Main Screen
 export default function CropCalendar({ navigation }) {
   const [selectedIdx, setSelectedIdx] = useState(0);
+  const { t, lang } = useLang();
   const crop = CROPS[selectedIdx];
 
   return (
@@ -370,12 +373,12 @@ export default function CropCalendar({ navigation }) {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={textStyle.h1()}>Crop Calendar</Text>
+          <Text style={textStyle.h1()}>{t['calendarTitle'] || 'Crop Calendar'}</Text>
         </View>
 
-        {/* Crop Selector */}
+        {/* Crop Selector - shows translated names for Tamil */}
         <ChipFilterRow
-          options={CROPS.map(c => c.name)}
+          options={CROPS.map(c => lang === 'ta' ? (getTranslatedCropName(c.name, lang) || c.name) : c.name)}
           selected={selectedIdx}
           onSelect={(idx) => setSelectedIdx(idx)}
           keyNames={CROPS.map(c => c.name)}
@@ -383,12 +386,12 @@ export default function CropCalendar({ navigation }) {
 
         {/* Crop Info */}
         <View style={{ paddingHorizontal: spacing.md }}>
-          <CropInfoCard crop={crop} />
+          <CropInfoCard crop={crop} lang={lang} />
         </View>
 
         {/* Cultivation Schedule */}
         <View style={{ paddingHorizontal: spacing.md }}>
-          <Text style={[textStyle.h3(), { marginBottom: spacing.md }]}>Cultivation Schedule</Text>
+          <Text style={[textStyle.h3(), { marginBottom: spacing.md }]}>{t['cultivationSchedule'] || 'Cultivation Schedule'}</Text>
           {crop.schedule.map((task, idx) => (
             <TaskCard key={idx} task={task} />
           ))}

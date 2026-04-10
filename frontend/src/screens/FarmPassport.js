@@ -188,7 +188,7 @@ function RecordDetailsModal({ visible, record, onClose, spacing: sp }) {
 }
 
 export default function FarmPassport({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { spacing: sp } = useResponsive();
 
   const [selectedRecord, setSelectedRecord] = useState(null);
