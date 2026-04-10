@@ -201,7 +201,7 @@ export default function GovSchemes({ navigation }) {
           <Feather name="arrow-left" size={24} color="#fff" />
         </TouchableOpacity>
         <View style={{ flex: 1, marginLeft: sp.md }}>
-          <Text style={[textStyle.h2({ color: '#fff' })]}>Govt Schemes</Text>
+          <Text style={[textStyle.h2({ color: '#fff' })]}>{t.govSchemesTitle}</Text>
           <Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 }}>
             {schemes.length} schemes found · AI-powered search
           </Text>

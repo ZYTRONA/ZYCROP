@@ -67,6 +67,147 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
+# ─── YOLOv8 + Disease Detection Routes ────────────────────────────────────────
+try:
+    from detection_routes import router as detection_router, initialize_pipeline, shutdown_pipeline
+    app.include_router(detection_router)
+    print("[OK] Detection routes integrated")
+except ImportError as e:
+    print(f"[WARN] Detection routes not available: {e}")
+    initialize_pipeline = None
+    shutdown_pipeline = None
+
+
+# ─── Health Check Endpoint ────────────────────────────────────────────────────
+@app.get("/api/health")
+async def health_check():
+    """Simple health check endpoint for debugging network issues."""
+    return {
+        "status": "ok",
+        "message": "ZYCROP Backend is running",
+        "version": "2.0.0",
+    }
+
+
+# ─── Startup & Shutdown Handlers ──────────────────────────────────────────────
+@app.on_event("startup")
+async def startup_event():
+    """Initialize detection pipeline on app startup."""
+    if initialize_pipeline:
+        try:
+            await initialize_pipeline()
+        except Exception as e:
+            print(f"[WARN] Detection pipeline startup failed: {e}")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Shutdown detection pipeline on app shutdown."""
+    if shutdown_pipeline:
+        try:
+            await shutdown_pipeline()
+        except Exception as e:
+            print(f"[WARN] Detection pipeline shutdown failed: {e}")
+
+# ─── MongoDB ──────────────────────────────────────────────────────────────────
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/ZYCROP")
+mongo_client: Any = AsyncIOMotorClient(MONGO_URL)  # type: ignore[no-untyped-call]
+db: Any = mongo_client["ZYCROP"]  # type: ignore[index]
+
+logs_col: Any     = db["farm_logs"]  # type: ignore[index]
+market_col: Any   = db["market_cache"]  # type: ignore[index]
+diagnose_col: Any = db["diagnose_history"]  # type: ignore[index]
+
+# ─── Pydantic Models ──────────────────────────────────────────────────────────
+class SoilPayload(BaseModel):
+    nitrogen:   Optional[float] = None
+    phosphorus: Optional[float] = None
+    potassium:  Optional[float] = None
+    ph:         Optional[float] = None
+    moisture:   Optional[float] = None
+    crop:       Optional[str]   = None
+    farmer_id:  Optional[str]   = "TN-CBE-9021"
+
+class SchemeQuery(BaseModel):
+    query: str
+
+class LoanQuery(BaseModel):
+    text: str
+    language: str = "en"
+    crop:     Optional[str] = None
+    acres:    Optional[float] = None
+
+class VoicePayload(BaseModel):
+    audio_base64:    Optional[str] = None
+    text:            Optional[str] = None
+    source_language: str = "ta"
+    target_language: str = "en"
+
+class PassportLog(BaseModel):
+    farmer_id:  str = "TN-CBE-9021"
+    event_type: str
+    date:       str = ""
+    note:       str
+    icon_color: Optional[str] = "#1b5e20"
+
+class ChatPayload(BaseModel):
+    """Ollama AI chat — powers Loan Advisor and Subsidy Finder."""
+    message:  str
+    language: str            = "en"   # BCP-47 code: en / ta / hi / te / ml
+    context:  str            = "loan" # "loan" | "subsidy" | "general"
+    crop:     Optional[str]  = None
+    acres:    Optional[float]= None
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# MODULE 1 — DISEASE DETECTION (EfficientNet-Lite1 / MobileViT-XS TFLite)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+_MODEL_DIR    = os.path.join(os.path.dirname(__file__), "models")
+_TFLITE_PATH  = os.path.join(_MODEL_DIR, "plant_disease.tflite")
+_LABELS_PATH  = os.path.join(_MODEL_DIR, "labels.json")
+
+_interpreter: Any = None
+_input_details: Any = None
+_output_details: Any = None
+_class_labels: list[str] = []
+_IMG_SIZE = 224   # EfficientNet-Lite1 / MobileNetV2 input
+
+def _load_tflite_model() -> bool:
+    global _interpreter, _input_details, _output_details, _class_labels
+    if not _tflite_module:
+        return False
+    if not os.path.exists(_TFLITE_PATH):
+        print(f"[WARN] TFLite model not found at {_TFLITE_PATH} — run train_plant_model.py first")
+        return False
+    try:
+        _interpreter = _tflite_module.Interpreter(model_path=_TFLITE_PATH)
+        _interpreter.allocate_tensors()
+        _input_details  = _interpreter.get_input_details()
+        _output_details = _interpreter.get_output_details()
+        if os.path.exists(_LABELS_PATH):
+            with open(_LABELS_PATH) as f:
+                _class_labels = json.load(f)
+        print(f"[OK] TFLite disease model loaded — {len(_class_labels)} classes")
+        return True
+    except Exception as exc:
+        print(f"[WARN] TFLite model load failed: {exc}")
+        return False
+
+_TFLITE_LOADED = _load_tflite_model()
+
+# Supplementary disease knowledge (treatment + fertilizer)
+_DISEASE_INFO: dict[str, dict[str, str]] = {
+    "tomato early blight":    {"severity": "Moderate", "color": "#e65100", "treatment": "Spray Copper Oxychloride 50WP (Blitox) 2.5g/L every 7 days for 3 weeks. Remove infected leaves.", "fertilizer": "Urea 20g/plant + MOP 15g/plant. Avoid overhead irrigation.", "organic_alt": "Neem oil 5ml/L weekly + Trichoderma viride 4g/L soil drench.", "timing": "Apply at 6 AM. Repeat every 30 DAS."},
+    "tomato late blight":     {"severity": "High",     "color": "#b71c1c", "treatment": "Metalaxyl + Mancozeb (Ridomil Gold) 2.5g/L immediately. Repeat after 7 days.", "fertilizer": "Potassium Nitrate 2% foliar. Avoid high N in wet season.", "organic_alt": "Bordeaux mixture 1% every 5 days.", "timing": "Act within 24h of first symptoms."},
+    "rice blast":             {"severity": "High",     "color": "#c62828", "treatment": "Tricyclazole 75WP (Beam) 0.6g/L. Drain field 3 days before spray.", "fertilizer": "Split N: 40kg/acre sowing + 20kg/acre tillering.", "organic_alt": "Potassium silicate 2% foliar weekly.", "timing": "Spray at panicle initiation stage."},
+    "rice brown spot":        {"severity": "Moderate", "color": "#f57c00", "treatment": "Mancozeb 75WP 2.5g/L or Copper Oxychloride 3g/L. 2 sprays at 10-day intervals.", "fertilizer": "Balanced NPK. Zinc Sulphate 25kg/ha.", "organic_alt": "Pseudomonas fluorescens 10g/L spray.", "timing": "Spray at tillering and booting stages."},
+    "potato late blight":     {"severity": "High",     "color": "#b71c1c", "treatment": "Cymoxanil + Mancozeb 2g/L immediately. Destroy severely infected haulms.", "fertilizer": "Potash 20kg/acre to improve resistance. Avoid excess N.", "organic_alt": "Copper hydroxide 2g/L spray weekly.", "timing": "Apply at first sign. Critical in cool/wet weather."},
+    "corn common rust":       {"severity": "Moderate", "color": "#f57c00", "treatment": "Propiconazole 25EC 1ml/L or Mancozeb 2.5g/L. 2 sprays at 10-day intervals.", "fertilizer": "Balanced K — Potash 20kg/acre top dress.", "organic_alt": "Sulfur 80WP 3g/L in early stages.", "timing": "First spray at rust pustule appearance."},
+    "cotton bollworm":        {"severity": "High",     "color": "#c62828", "treatment": "Emamectin Benzoate 5SG 0.4g/L. Install pheromone traps 5/acre.", "fertilizer": "NPK 19:19:19 foliar at 5g/L weekly during boll formation.", "organic_alt": "Bt kurstaki 2ml/L. NPV 250 LE/ha.", "timing": "Spray at boll formation, avoid flowering."},
+    "apple scab":             {"severity": "Moderate", "color": "#f57c00", "treatment": "Captan 50WP 2.5g/L or Mancozeb 75WP 2g/L at green tip stage.", "fertilizer": "Balanced NPK. Calcium Nitrate 2g/L foliar post petal fall.", "organic_alt": "Lime sulfur 1% spray at pre-bloom.", "timing": "Spray at bud break; repeat every 7–10 days in wet weather."},
+    "grape black rot":        {"severity": "High",     "color": "#c62828", "treatment": "Mancozeb 75WP 2g/L + Carbendazim 1g/L. Start at bud break, repeat every 10 days.", "fertilizer": "Potassium Sulphate 3g/L foliar spray monthly.", "organic_alt": "Copper Oxychloride 3g/L as protective spray.", "timing": "Critical period: bloom to 3 weeks after bloom."},
+=======
 # ─── Test Data ───────────────────────────────────────────────────────────
 MARKET_DATA_CACHE: MarketCacheDict = {
     "Rice": {
@@ -103,6 +244,7 @@ MARKET_DATA_CACHE: MarketCacheDict = {
         "source": "agmarknet_api",
         "updated_at": datetime.now().isoformat()
     }
+>>>>>>> 078747ca9c42df5f648c3d864c0ff984cee06123
 }
 
 # ─── API Endpoints ───────────────────────────────────────────

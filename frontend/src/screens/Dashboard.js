@@ -138,13 +138,13 @@ function WeatherStat({ icon, value, unit, label }) {
 }
 
 /** Farm score ring — simple circular indicator */
-function ScoreRing({ score }) {
+function ScoreRing({ score, t }) {
   const color = score >= 75 ? COLORS.accent : score >= 50 ? COLORS.warning : COLORS.danger;
   return (
     <View style={styles.scoreRing}>
       <View style={[styles.scoreRingInner, { borderColor: color }]}>
         <Text style={[styles.scoreValue, { color }]}>{score}</Text>
-        <Text style={styles.scoreLabel}>score</Text>
+        <Text style={styles.scoreLabel}>{t?.score || 'Score'}</Text>
       </View>
     </View>
   );
@@ -328,7 +328,7 @@ export default function Dashboard({ navigation }) {
         >
           <View style={styles.languageMenuSheet}>
             <View style={styles.languageMenuHandle} />
-            <Text style={styles.languageMenuTitle}>Select Language</Text>
+            <Text style={styles.languageMenuTitle}>{t.selectLanguage}</Text>
             {['en', 'ta', 'hi', 'te', 'ml'].map((lang) => (
               <TouchableOpacity
                 key={lang}
@@ -401,7 +401,7 @@ export default function Dashboard({ navigation }) {
           {/* Farm score + weather row */}
           <View style={styles.heroStats}>
             {farmScore !== null ? (
-              <ScoreRing score={farmScore} />
+              <ScoreRing score={farmScore} t={t} />
             ) : (
               <ActivityIndicator color="#fff" />
             )}
@@ -409,9 +409,9 @@ export default function Dashboard({ navigation }) {
             <View style={styles.weatherRow}>
               {weather ? (
                 <>
-                  <WeatherStat icon="sun" value={weather.temp} unit="°C" label={t['weatherTemp'] || 'Temp'} />
-                  <WeatherStat icon="droplet" value={weather.humidity} unit="%" label={t['weatherHumidity'] || 'Humidity'} />
-                  <WeatherStat icon="cloud-rain" value={weather.rain} unit="mm" label={t['weatherRain'] || 'Rain'} />
+                <WeatherStat icon="sun" value={weather.temp} unit="°C" label={t.weatherTemp} />
+                <WeatherStat icon="droplet" value={weather.humidity} unit="%" label={t.weatherHumidity} />
+                <WeatherStat icon="cloud-rain" value={weather.rain} unit="mm" label={t.weatherRain} />
                 </>
               ) : (
                 [0,1,2].map(i => (

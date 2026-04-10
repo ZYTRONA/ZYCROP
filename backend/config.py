@@ -17,20 +17,36 @@ BASE_DIR = Path(__file__).parent
 MODEL_DIR = BASE_DIR / 'models'
 DATA_DIR = BASE_DIR / 'data'
 LOG_DIR = BASE_DIR / 'logs'
+# UPDATED: Custom model and disease info paths  
+MY_MODEL_PATH = MODEL_DIR / 'my_crop_disease.tflite'
+DISEASE_INFO_PATH = DATA_DIR / 'disease_info.json'
+MY_MODEL_INPUT_SIZE = 224
+MY_MODEL_CONFIDENCE_THRESHOLD = 0.60
+
 
 # Create directories
 MODEL_DIR.mkdir(exist_ok=True)
 DATA_DIR.mkdir(exist_ok=True)
 LOG_DIR.mkdir(exist_ok=True)
 
+
 # ─── Detection Model Paths ────────────────────────────────────────────────────
 MODELS = {
     'disease_classifier': {
-        'path': MODEL_DIR / 'plant_disease.tflite',
+        'path': MODEL_DIR / 'my_crop_disease.tflite',
+        'labels_path': MODEL_DIR / 'labels.json',
         'type': 'tflite',
         'input_size': 224,
-        'description': 'MobileNetV2 for disease classification'
+        'description': 'Custom MobileNetV2 for disease classification'
     },
+        # UPDATED: Custom trained model configuration
+        'custom_disease_classifier': {
+            'path': MODEL_DIR / 'my_crop_disease.tflite',
+            'labels_path': MODEL_DIR / 'labels.json',  # Class labels mapping
+            'type': 'tflite',
+            'input_size': 224,
+            'description': 'Custom MobileNetV2 trained on user dataset'
+        },
     'yolo_detector': {
         'model_name': 'yolov8m',  # nano, small, medium, large, xlarge
         'description': 'YOLOv8 Medium for leaf detection',

@@ -35,7 +35,7 @@ class ImageValidator:
     
     # Dimension constraints
     MIN_DIMENSION = 64
-    MAX_DIMENSION = 4096
+    MAX_DIMENSION = 8192  # UPDATED: Allow high-res images (4K+), auto-adjustment will resize
     
     @staticmethod
     def validate_image_bytes(image_data: bytes) -> Tuple[bool, Optional[str]]:
@@ -178,6 +178,78 @@ class ImagePreprocessor:
             array = np.array(image, dtype=np.float32) / 255.0
             return array
         except Exception:
+            return None
+    
+    @staticmethod
+    def auto_adjust_image_size(
+        image: Any,
+        max_dimension: int = 1536,
+        min_dimension: int = 480
+    ) -> Optional[Tuple[Any, dict]]:
+        """Auto-adjust image size for optimal processing.
+        
+        Automatically resizes large images to a reasonable max dimension while
+        maintaining aspect ratio and image quality. This optimizes memory usage
+        and processing speed for large camera captures (e.g., 4K images).
+        
+        Args:
+            image: PIL Image object
+            max_dimension: Maximum width or height (default 1536 - best for YOLO)
+            min_dimension: Minimum acceptable dimension (default 480)
+            
+        Returns:
+            Tuple (adjusted_image, adjustment_info_dict) or None on error
+            adjustment_info contains: original_size, new_size, was_resized, scale_factor
+        """
+        if not _pil_ok:
+            return None
+        
+        try:
+            original_width, original_height = image.size
+            original_size = (original_width, original_height)
+            
+            # Calculate max current dimension
+            max_current = max(original_width, original_height)
+            min_current = min(original_width, original_height)
+            
+            adjustment_info = {
+                'original_size': original_size,
+                'new_size': original_size,
+                'was_resized': False,
+                'scale_factor': 1.0,
+                'reason': 'No adjustment needed'
+            }
+            
+            # Check if resizing needed
+            if max_current > max_dimension:
+                # Calculate scale factor
+                scale_factor = max_dimension / max_current
+                new_width = int(original_width * scale_factor)
+                new_height = int(original_height * scale_factor)
+                
+                # Ensure minimum dimension
+                if min(new_width, new_height) < min_dimension:
+                    scale_factor = min_dimension / min_current
+                    new_width = int(original_width * scale_factor)
+                    new_height = int(original_height * scale_factor)
+                
+                # Resize with LANCZOS for high quality
+                adjusted_image = image.resize(
+                    (new_width, new_height),
+                    Image.Resampling.LANCZOS
+                )
+                
+                adjustment_info.update({
+                    'new_size': (new_width, new_height),
+                    'was_resized': True,
+                    'scale_factor': scale_factor,
+                    'reason': f'Resized from {max_current}px to {max(new_width, new_height)}px'
+                })
+                
+                return adjusted_image, adjustment_info
+            
+            return image, adjustment_info
+        except Exception as e:
             return None
     
     @staticmethod

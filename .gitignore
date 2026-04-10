@@ -1,1 +1,70 @@
 node_modules
+
+# ─── Environment & Config ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.env
+
+# ─── Virtual Environments ─────────────────────────────────────────────────────
+.venv/
+.venv311/
+.venv_py314_backup/
+venv/
+env/
+ENV/
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ─── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ─── ML Model Caches (download on first run) ──────────────────────────────────
+# These are downloaded locally and should not be committed
+# ~/.cache/ultralytics/
+# ~/.cache/huggingface/
+# ~/.cache/faster_whisper/
+# ~/nltk_data/
+
+# ─── Database ──────────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+mongodb/
+
+# ─── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+
+# ─── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
