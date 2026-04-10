@@ -1,4 +1,4 @@
-#!/home/jeeva/project/zycrop/ZYCROP/ZYCROP/backend/venv/bin/python3
+#!/run/media/aadhiasarana/E/ZYCROP/backend/venv/bin/python3
 import sys
 from uvicorn.main import main
 if __name__ == '__main__':

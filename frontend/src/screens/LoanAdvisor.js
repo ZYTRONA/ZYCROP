@@ -1,6 +1,7 @@
 /**
  * LoanAdvisor.js — AI Loan & Finance Advisor
  * Real-time chat with Ollama AI for KCC, NABARD, interest calculations
+ * Now with voice readout for AI responses!
  */
 import React, { useState, useRef, useCallback } from 'react';
 import {
@@ -11,79 +12,87 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLang } from '../context/LanguageContext';
+import { VoiceChatBubble } from '../components/ui';
 import { colors, spacing, radius, textStyle } from '../theme/tokens';
 import { useResponsive } from '../theme/responsive';
+import { translations } from '../constants/translations';
 
 const QUICK_QUESTIONS = [
   'How much KCC loan can I get?',
-  'KCC eligibility for 2 acres',
-  'NABARD investment loan docs',
+  'KCC eligibility criteria',
+  'NABARD investment loan for irrigation',
   'Interest rate on crop loan',
-  'Kisan Credit Card renewal',
-  'Loan for drip irrigation',
+  'PMFBY crop insurance details',
+  'Government subsidy schemes',
+  'How to renew KCC?',
+  'Loan calculator',
+  'What if I default on payment?',
+  'NABARD documentation needed',
 ];
 
-// Offline responses for common queries
-const OFFLINE_AI = (msg) => {
+// Offline responses with multilingual support
+const OFFLINE_AI = (msg, t) => {
   const m = msg.toLowerCase();
+  
   if (m.includes('kcc') || m.includes('kisan credit')) {
-    return `**Kisan Credit Card (KCC)**\n\n✅ Loan up to ₹3,00,000 at 4% effective interest (7% - 3% govt subvention).\n\n📋 **Documents needed:**\n• Patta/Adangal (land record)\n• Cultivation certificate from Village Officer\n• Aadhar + PAN card\n• Bank passbook (last 6 months)\n• Passport photo\n\n🏦 Apply at: SBI, Canara Bank, Indian Bank, or any cooperative bank. Processing: 7–15 days.`;
+    return t.loan_advisor_kcc;
   }
-  if (m.includes('nabard') || m.includes('investment') || m.includes('drip') || m.includes('cold storage')) {
-    return `**NABARD Farm Investment Loan**\n\n✅ Long-term loan for drip/sprinkler irrigation, cold storage, farm machinery.\n\n💰 Amount: Up to ₹10 lakh\nInterest: 8–12% p.a. (varies by bank)\nTenure: 5–7 years\n\n📋 Documents: Land records, project report, bank statements, Aadhar.\n\n🏦 Apply through NABARD-linked banks. Subsidy available under various schemes.`;
+  if (m.includes('nabard') || m.includes('investment') || m.includes('drip') || m.includes('cold storage') || m.includes('machinery')) {
+    return t.loan_advisor_nabard;
   }
-  if (m.includes('interest') || m.includes('rate')) {
-    return `**Agricultural Loan Interest Rates (2025–26)**\n\n| Loan Type | Rate | Effective Rate |\n|-----------|------|----------------|\n| KCC (up to ₹3L) | 7% | 4% (after 3% subvention) |\n| KCC (₹3L–₹5L) | 9.5–11% | — |\n| TN Co-op Loan | 7% | 4% | \n| NABARD Term | 8–12% | Varies |\n| SHG Agri Loan | 10–12% | — |\n\n💡 Tip: Repay KCC on time to get additional 3% prompt repayment incentive (total 1% rate).`;
+  if (m.includes('pmfby') || m.includes('crop insurance')) {
+    return t.loan_advisor_pmfby;
+  }
+  if (m.includes('interest') || m.includes('rate') || m.includes('agri rate')) {
+    return t.loan_advisor_interest_rates;
   }
   if (m.includes('eligib')) {
-    return `**Crop Loan Eligibility**\n\n✅ Basic requirements:\n• Own or lease land (patta or lease deed)\n• Indian citizen aged 18–70\n• No existing loan default\n• Valid Aadhar + mobile linked to Aadhar\n\n🌾 KCC limit = (Crop cost per acre × Acres) + (20% risk + 10% post-harvest)\n\nExample: 3 acres paddy:\n• Crop cost: ₹18,000/acre × 3 = ₹54,000\n• Risk + PH: + ₹16,200\n• **KCC limit: ₹70,200**`;
+    return t.loan_advisor_pmfby;
   }
-  return `I'm your AI Loan Advisor for ZYCROP. Ask me about:\n\n• KCC — Kisan Credit Card eligibility & limits\n• NABARD investment loans for machinery, drip irrigation\n• Interest rates on crop loans\n• PMFBY crop insurance\n• Government subsidy schemes\n\nType your question in English, Hindi, or Tamil. I'm ready to help!`;
+  if (m.includes('subsidy') || m.includes('scheme') || m.includes('government')) {
+    return t.loan_advisor_interest_rates;
+  }
+  if (m.includes('renew') || m.includes('renewal')) {
+    return t.loan_advisor_kcc;
+  }
+  if (m.includes('default') || m.includes('late payment')) {
+    return t.loan_advisor_interest_rates;
+  }
+  if (m.includes('calculator') || m.includes('calculate') || m.includes('compute')) {
+    return t.loan_advisor_interest_rates;
+  }
+  if (m.includes('calculator') || m.includes('calculate') || m.includes('compute')) {
+    return `**Loan Amount Calculator**\n\n🧮 **Step-by-step Calculation:**\n\n**For KCC Loans:**\n1. Find your crop cost per acre (market data)\n2. Multiply by total cultivated acres\n3. Add 20% contingency buffer\n4. Add 10% for post-harvest costs\n\nFormula: (Acre × Cost) + 20% + 10%\n\n**Example Calculation (Paddy - 2 acres):**\n• Paddy cost/acre: ₹18,000\n• 2 acres: ₹18,000 × 2 = ₹36,000\n• Contingency (20%): ₹7,200\n• Post-harvest (10%): ₹3,600\n• **KCC Limit = ₹46,800**\n\n**Interest Calculation:**\nMonthly Interest = (Loan Amount × Rate%) ÷ 12\n\nExample: ₹46,800 @ 7% p.a. for 12 months\n= (46,800 × 7) ÷ 12 = ₹2,730 interest\n= ₹46,800 + ₹2,730 = ₹49,530 total\n\n**After Subsidy (3% + 3%):**\n= Effective rate: 1% p.a.\n= (46,800 × 1) ÷ 12 = ₹390 interest only!\n\n💡 **Savings with Subsidy:** ₹2,730 - ₹390 = ₹2,340 saved!`;
+  }
+  return t.loan_advisor_default;
 };
 
-function ChatBubble({ msg }) {
-  const isUser = msg.role === 'user';
-
-  // Parse basic markdown: **bold**, bullet points
-  const formatText = (text) => {
-    return text.split('\n').map((line, i) => {
-      const isBullet = line.trim().startsWith('•') || line.trim().startsWith('-');
-      const isBold = line.includes('**');
-      const parts = line.split('**');
-      return (
-        <Text key={i} style={[
-          cb.msgText,
-          { color: isUser ? '#fff' : colors.textPrimary },
-          isBullet && { paddingLeft: 8 },
-          !isUser && { fontSize: 13, lineHeight: 20 },
-        ]}>
-          {isBold ? parts.map((p, j) => (
-            <Text key={j} style={j % 2 === 1 ? { fontWeight: '800' } : {}}>{p}</Text>
-          )) : line}
-          {'\n'}
-        </Text>
-      );
-    });
-  };
-
+function UserChatBubble({ msg, lang }) {
+  // User messages rendered as simple bubbles (no voice needed)
   return (
-    <View style={[cb.wrap, isUser ? cb.userWrap : cb.aiWrap]}>
-      {!isUser && (
-        <View style={cb.avatar}>
-          <MaterialCommunityIcons name="robot-outline" size={16} color="#fff" />
-        </View>
-      )}
-      <View style={[cb.bubble, isUser ? cb.userBubble : cb.aiBubble]}>
-        {formatText(msg.text)}
+    <View style={[cb.wrap, cb.userWrap]}>
+      <View style={[cb.bubble, cb.userBubble]}>
+        <Text style={[cb.msgText, { color: '#fff' }]}>{msg.text}</Text>
       </View>
-      {isUser && (
-        <View style={[cb.avatar, { backgroundColor: colors.border }]}>
-          <Feather name="user" size={16} color={colors.textMuted} />
-        </View>
-      )}
+      <View style={[cb.avatar, { backgroundColor: colors.border }]}>
+        <Feather name="user" size={16} color={colors.textMuted} />
+      </View>
     </View>
   );
 }
+
+function AIMessageWithVoice({ msg, lang }) {
+  // AI messages with voice readout button
+  return (
+    <VoiceChatBubble
+      role="ai"
+      text={msg.text}
+      lang={lang}
+      enableVoice={true}
+    />
+  );
+}
+
 const cb = StyleSheet.create({
   wrap: { flexDirection: 'row', alignItems: 'flex-end', marginBottom: spacing.md, gap: spacing.sm },
   userWrap: { justifyContent: 'flex-end' },
@@ -103,11 +112,11 @@ const LOAN_INFO_CARDS = [
 ];
 
 export default function LoanAdvisor({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { spacing: sp } = useResponsive();
   const scrollRef = useRef(null);
   const [messages, setMessages] = useState([
-    { role: 'ai', text: 'Vanakkam! 🌾 I am your AI Loan Advisor. Ask me anything about agricultural loans, KCC, NABARD schemes, interest rates, or subsidy eligibility. I can reply in English, Hindi, or Tamil.' }
+    { role: 'ai', text: t.loanGreeting }
   ]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
@@ -121,11 +130,12 @@ export default function LoanAdvisor({ navigation }) {
     setTyping(true);
     // 100% offline — use local AI knowledge base with simulated thinking delay
     setTimeout(() => {
-      setMessages(prev => [...prev, { role: 'ai', text: OFFLINE_AI(msg) }]);
+      const langTranslations = translations[lang] || translations.en;
+      setMessages(prev => [...prev, { role: 'ai', text: OFFLINE_AI(msg, langTranslations) }]);
       setTyping(false);
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
     }, 700);
-  }, [input]);
+  }, [input, lang]);
 
   return (
     <SafeAreaView style={s.container}>
@@ -171,7 +181,13 @@ export default function LoanAdvisor({ navigation }) {
           contentContainerStyle={{ padding: sp.md, paddingBottom: 20 }}
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
         >
-          {messages.map((msg, i) => <ChatBubble key={i} msg={msg} />)}
+          {messages.map((msg, i) =>
+            msg.role === 'user' ? (
+              <UserChatBubble key={i} msg={msg} lang={lang} />
+            ) : (
+              <AIMessageWithVoice key={i} msg={msg} lang={lang} />
+            )
+          )}
           {typing && (
             <View style={[cb.wrap, cb.aiWrap]}>
               <View style={cb.avatar}>
@@ -227,7 +243,7 @@ const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surfaceAlt },
   header: { backgroundColor: colors.primary, paddingVertical: spacing.md, flexDirection: 'row', alignItems: 'center' },
   aiDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#52B788' },
-  infoCard: { backgroundColor: colors.surface, borderRadius: radius.md, padding: 10, alignItems: 'center', width: 80, borderWidth: 1 },
+  infoCard: { backgroundColor: colors.surface, borderRadius: radius.md, padding: 12, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', minWidth: 100, borderWidth: 1, flex: 1 },
   chatScroll: { flex: 1 },
   quickRow: { backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, maxHeight: 50 },
   quickQ: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, backgroundColor: colors.primary + '12', borderWidth: 1, borderColor: colors.primary + '30' },

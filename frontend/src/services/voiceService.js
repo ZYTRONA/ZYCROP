@@ -174,3 +174,87 @@ export const speakNavigation = (screen, lang) => {
   }
   speak(msgs[lang] || msgs.en, lang)
 }
+
+// ─── Loan Advisor Readout ──────────────────────────────────────────────────
+
+/**
+ * Read out loan response text for LoanAdvisor screen
+ * Strips markdown and cleans text before reading
+ */
+export const speakLoanAdviceClean = (text, lang = 'en') => {
+  if (!text) return
+  const cleanText = text
+    .replace(/\*\*/g, '') // Remove bold markers
+    .replace(/\n/g, ' ') // Convert newlines to spaces
+    .replace(/•|–|—/g, '') // Remove bullet types
+    .replace(/\[|\]/g, '') // Remove brackets
+    .replace(/\|/g, '|') // Keep table pipes as is... actually remove
+    .substring(0, 300) // Limit to ~30 seconds of speech
+  
+  speak(cleanText, lang, { rate: 0.85 })
+}
+
+// ─── Pathologist / Disease Scan Readout ────────────────────────────────────
+
+export const speakPathologistFinding = (disease, severity, accuracy, lang) => {
+  const msgs = {
+    en: `Disease detected: ${disease}. Severity level: ${severity}. AI confidence: ${accuracy} percent. Treatment plan is available below.`,
+    ta: `நோய் கண்டறியப்பட்டது: ${disease}. தீவிरতा நிலை: ${severity}. AI நம்பிக்கை: ${accuracy} சதவீதம். சிகிச்சை திட்டம் கீழே உள்ளது.`,
+    hi: `रोग पहचाना गया: ${disease}। गंभीरता स्तर: ${severity}। एआई आत्मविश्वास: ${accuracy} प्रतिशत। उपचार योजना नीचे उपलब्ध है।`,
+    te: `వ్యాధి గుర్తించబడింది: ${disease}। తీవ్రత స్థాయి: ${severity}। AI ఖచ్చితత: ${accuracy} శതాభిప్రాయం। చికిత్స ప్రణాళిక దిగువ అందుబాటులో ఉంది।`,
+    ml: `രോഗം കണ്ടെത്തി: ${disease}। തീവ്രത തലം: ${severity}। AI വിശ്വാസ്യത: ${accuracy} ശതമാനം। ചികിത്സ പദ്ധതി താഴെ ലഭ്യമാണ്.`,
+  }
+  speak(msgs[lang] || msgs.en, lang, { rate: 0.85 })
+}
+
+// ─── Pest & Disease Treatment ──────────────────────────────────────────────
+
+export const speakTreatmentPlan = (pestName, dosage, frequency, lang) => {
+  const msgs = {
+    en: `For ${pestName}, apply ${dosage} every ${frequency} days. Spray in early morning or after 4 PM. Wear protective gear.`,
+    ta: `${pestName} இற்கு, ${dosage} ஐ ஒவ்வொரு ${frequency} நாட்களுக்கும் பயன்படுத்தவும். காலை வேளையில் அல்லது மாலை 4 மணிக்குப் பிறகு தெளிக்கவும்.`,
+    hi: `${pestName} के लिए, हर ${frequency} दिनों में ${dosage} डालें। सुबह जल्दी या शाम 4 बजे के बाद स्प्रे करें।`,
+    te: `${pestName} కోసం, ప్రతి ${frequency} రోజులకు ${dosage} ను వర్తించండి. ఉదయం లేదా సాయంత్రం 4 PM తర్వాత చల్లుకుండి.`,
+    ml: `${pestName} നായി, ഓരോ ${frequency} ദിനങ്ങളിലും ${dosage} പ്രയോഗിക്കുക. നലുവെളിച്ചത്തിൽ അല്ലെങ്കിൽ വൈകാലത്ത് 4 PM കഴിഞ്ഞ് സ്പ്രേ ചെയ്യുക.`,
+  }
+  speak(msgs[lang] || msgs.en, lang, { rate: 0.88 })
+}
+
+// ─── Soil Lab Result Readout ────────────────────────────────────────────────
+
+export const speakSoilDetails = (nitrogen, phosphorus, potassium, ph, organic, lang) => {
+  const msgs = {
+    en: `Soil analysis results: Nitrogen ${nitrogen}, Phosphorus ${phosphorus}, Potassium ${potassium}. pH level is ${ph}. Organic matter is ${organic} percent.`,
+    ta: `மண் பகுப்பாய்வு முடிவுகள்: நைட்ரஜன் ${nitrogen}, பாஸ்பரஸ் ${phosphorus}, பொட்டாசியம் ${potassium}। pH நிலை ${ph} ஆகும்। கரிம பொருள் ${organic} சதவீதம் ஆகும்.`,
+    hi: `मिट्टी विश्लेषण परिणाम: नाइट्रोजन ${nitrogen}, फॉस्फोरस ${phosphorus}, पोटेशियम ${potassium}। पीएच स्तर ${ph} है। जैविक पदार्थ ${organic} प्रतिशत है।`,
+    te: `నేల విశ్లేషణ ఫలితాలు: నైట్రోజన్ ${nitrogen}, ఫాస్ఫరస్ ${phosphorus}, పొటాషియం ${potassium}। pH స్థాయి ${ph}। సేంద్రీయ పదార్థం ${organic} శతాభిప్రాయం.`,
+    ml: `മണ്ണ് വിശകലനം ഫലങ്ങൾ: നൈട്രജൻ ${nitrogen}, ഫോസ്ഫറസ് ${phosphorus}, പൊട്ടാസ്യം ${potassium}। pH നിരപ്പ് ${ph}। ജൈവ പദാർത്ഥം ${organic} ശതമാനം.`,
+  }
+  speak(msgs[lang] || msgs.en, lang, { rate: 0.87 })
+}
+
+// ─── Crop Calendar Readout ─────────────────────────────────────────────────
+
+export const speakSeasonalAdvice = (month, crop, activity, lang) => {
+  const msgs = {
+    en: `In ${month}, for ${crop}, it is time to ${activity}. Make sure soil is well prepared.`,
+    ta: `${month} இல், ${crop} க்கு, இது ${activity} செய்ய நேரம் ஆகும். மண் நன்றாக தயாரிக்கப்பட்டுள்ளதை உறுதி செய்யவும்.`,
+    hi: `${month} में, ${crop} के लिए, यह समय है ${activity}। सुनिश्चित करें कि मिट्टी अच्छी तरह से तैयार है।`,
+    te: `${month} లో, ${crop} కోసం, ${activity} చేయడానికి ఇది సమయం. నేల బాగా తయారు చేయబడిందని నిশ్చితం చేసుకోండి.`,
+    ml: `${month} ൽ, ${crop} നായി, ${activity} ചെയ്യാനുള്ള സമയമാണിത്. മണ്ണ് നന്നായി തയ്യാറാണെന്ന് ഉറപ്പാക്കുക.`,
+  }
+  speak(msgs[lang] || msgs.en, lang, { rate: 0.87 })
+}
+
+// ─── Farm Passport Readout ─────────────────────────────────────────────────
+
+export const speakFarmCertificate = (landArea, surveyNo, owner, lang) => {
+  const msgs = {
+    en: `Farm Passport verified. Land area: ${landArea} acres. Survey number: ${surveyNo}. Owner: ${owner}. All details are official.`,
+    ta: `பண்ணை பாஸ்போர்ட் சரிபார்க்கப்பட்டது. நிலப்பரப்பு: ${landArea} ஏக்கர். ஆய்வு எண்: ${surveyNo}. உரிமையாளர்: ${owner}. அனைத்து விவரங்களும் அதிகாரபூர்வமാகும்.`,
+    hi: `फार्म पासपोर्ट सत्यापित। भूमि क्षेत्र: ${landArea} एकड़। सर्वेक्षण संख्या: ${surveyNo}। मालिक: ${owner}। सभी विवरण आधिकारिक हैं।`,
+    te: `ఫార్మ్ పాస్పోర్ట్ ధృవీకరించబడింది. భూభాగ: ${landArea} ఎకరలు. సర్వే సంఖ్య: ${surveyNo}. యజమాని: ${owner}. అన్ని వివరాలు అధికారిక.`,
+    ml: `ഫാം പാസ്പോർട്ട് പരിശോധിച്ചുറപ്പിച്ചു. ഭൂമിയുടെ വിസ്തീർണ്ണം: ${landArea} ഏക്കർ. സർവേ നമ്പർ: ${surveyNo}. ഉടമ: ${owner}. എല്ലാ വിവരങ്ങളും ഔദ്യോഗികമാണ്.`,
+  }
+  speak(msgs[lang] || msgs.en, lang, { rate: 0.87 })
+}

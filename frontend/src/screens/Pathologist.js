@@ -157,7 +157,9 @@ const DISEASE_DB = [
 
 // ─── Disease Result Modal Component ────────────────────────────────────
 function DiseaseResultModal({ visible, disease, onClose, t }) {
+  const { lang } = useLang();
   const { spacing: sp } = useResponsive();
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   if (!disease) return null;
 
@@ -165,6 +167,12 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
     disease.severity === 'Severe' ? 'danger' :
     disease.severity === 'High' ? 'warning' :
     disease.severity === 'Moderate' ? 'warning' : 'info';
+
+  const handleReadDiagnosis = () => {
+    setIsSpeaking(true);
+    speakDiseaseResult(disease.disease, disease.severity, lang);
+    setTimeout(() => setIsSpeaking(false), 3000); // Approximate duration
+  };
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -216,6 +224,25 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
             <Text style={[textStyle.bodySmall(), { marginTop: sp.sm, color: '#4A4A4A', fontWeight: '500' }]}>
               ✓ {Math.round(disease.confidence)}% Confidence Match
             </Text>
+
+            {/* Voice Readout Button */}
+            <TouchableOpacity
+              onPress={handleReadDiagnosis}
+              disabled={isSpeaking}
+              style={[
+                styles.voiceButton,
+                { marginTop: sp.md, backgroundColor: isSpeaking ? colors.primary + '80' : colors.primary, opacity: isSpeaking ? 0.6 : 1 }
+              ]}
+            >
+              <MaterialCommunityIcons
+                name={isSpeaking ? 'volume-high' : 'volume-2'}
+                size={18}
+                color="#fff"
+              />
+              <Text style={{ color: '#fff', fontWeight: '600', marginLeft: sp.sm }}>
+                {isSpeaking ? 'Reading...' : '🔊 Hear Diagnosis'}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Quick Info Grid */}
@@ -300,7 +327,7 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
 }
 
 // ─── Camera Screen Component ────────────────────────────────────
-function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
+function CameraScreen({ onClose, _selectedCrop, onDetectDisease, t }) {
   const [permission, requestPermission] = ExpoCamera.useCameraPermissions();
   const [analyzing, setAnalyzing] = useState(false);
   const cameraRef = useRef(null);
@@ -560,6 +587,7 @@ export default function Pathologist({ navigation }) {
           setResultModalVisible(true);
           setShowCamera(false);
         }}
+        t={t}
       />
     );
   }
@@ -574,14 +602,14 @@ export default function Pathologist({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Feather name="arrow-left" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={textStyle.h1()}>AI Disease Scan</Text>
+          <Text style={textStyle.h1()}>{t.pathTitle}</Text>
           <View style={{ width: 24 }} />
         </View>
 
         {/* Crop Selector */}
         <View style={styles.cropSelectorSection}>
           <Text style={[textStyle.body(), { marginBottom: sp.sm, marginLeft: sp.md, fontWeight: '600' }]}>
-            Select Crop
+            {t.selectCrop}
           </Text>
           <ChipFilterRow
             items={CROPS}
@@ -597,10 +625,10 @@ export default function Pathologist({ navigation }) {
             <MaterialCommunityIcons name="leaf" size={52} color={colors.primary} />
           </View>
           <Text style={[textStyle.h2(), { marginTop: sp.md, textAlign: 'center' }]}>
-            Identify Disease
+            {t.diseaseDetected}
           </Text>
           <Text style={[textStyle.bodySmall(), { marginTop: sp.sm, textAlign: 'center', color: '#666' }]}>
-            Point your camera at a damaged leaf to detect diseases instantly
+            {t.cameraTextPath}
           </Text>
 
           <View style={styles.featureGrid}>
@@ -666,7 +694,7 @@ export default function Pathologist({ navigation }) {
           onPress={() => navigation.navigate('DiseaseLibrary')}
         >
           <MaterialCommunityIcons name="book-open-page-variant" size={20} color={colors.primary} />
-          <Text style={[styles.btnText, { color: colors.primary }]}>Disease Library</Text>
+          <Text style={[styles.btnText, { color: colors.primary }]}>{t.libraryTitle}</Text>
         </TouchableOpacity>
       </View>
 
@@ -989,5 +1017,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.lg,
     paddingBottom: spacing.xl,
+  },
+  voiceButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.primary,
   },
 });

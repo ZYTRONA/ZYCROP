@@ -1,12 +1,30 @@
 import React, {
   createContext, useState, useContext, useEffect, useCallback, useRef,
 } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator, Modal, Animated } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, Modal, Animated, StatusBar } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { translations } from '../constants/translations'
 import {
   translateAllKeys, getCachedTranslation, cacheTranslation,
 } from '../services/translateService'
+
+// ─── Translation fallback helper ────────────────────────────────────────────
+const createTranslationProxy = (lang, fallback = translations.en) => {
+  return new Proxy(translations[lang] || {}, {
+    get: (target, prop) => {
+      // Return the value if it exists in the target language
+      if (prop in target && target[prop] !== undefined) {
+        return target[prop]
+      }
+      // Fall back to English if key is missing
+      if (prop in fallback) {
+        return fallback[prop]
+      }
+      // Return the key itself as last resort (no empty values)
+      return String(prop)
+    },
+  })
+}
 
 // ─── Languages config ────────────────────────────────────────────────────────
 export const LANGUAGES = [
@@ -37,32 +55,35 @@ function LangLoadingOverlay({ lang, progress, total }) {
   }, [pulse])
 
   return (
-    <Modal visible transparent animationType="fade">
-      <View style={S.overlay}>
-        {/* Decorative blobs */}
-        <View style={S.blob1} />
-        <View style={S.blob2} />
-        <View style={S.card}>
-          <Animated.Text style={[S.flag, { transform: [{ scale: pulse }] }]}>
-            {langObj?.flag ?? '🌐'}
-          </Animated.Text>
-          <View style={S.badge}>
-            <Text style={S.badgeTxt}>AI TRANSLATING</Text>
-          </View>
-          <Text style={S.title}>Switching to</Text>
-          <Text style={S.langName}>{langObj?.native ?? lang}</Text>
-          <Text style={S.sub}>Translating all screens in real-time...</Text>
-          <View style={S.barWrap}>
-            <Animated.View style={[S.barFill, { width: `${pct}%` }]} />
-            <View style={[S.barGlow, { left: `${Math.max(0, pct - 6)}%` }]} />
-          </View>
-          <View style={S.pctRow}>
-            <ActivityIndicator color="#69f0ae" size="small" />
-            <Text style={S.pct}>{pct}% complete</Text>
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="#071a09" />
+      <Modal visible transparent animationType="fade">
+        <View style={S.overlay}>
+          {/* Decorative blobs */}
+          <View style={S.blob1} />
+          <View style={S.blob2} />
+          <View style={S.card}>
+            <Animated.Text style={[S.flag, { transform: [{ scale: pulse }] }]}>
+              {langObj?.flag ?? '🌐'}
+            </Animated.Text>
+            <View style={S.badge}>
+              <Text style={S.badgeTxt}>AI TRANSLATING</Text>
+            </View>
+            <Text style={S.title}>Switching to</Text>
+            <Text style={S.langName}>{langObj?.native ?? lang}</Text>
+            <Text style={S.sub}>Translating all screens in real-time...</Text>
+            <View style={S.barWrap}>
+              <Animated.View style={[S.barFill, { width: `${pct}%` }]} />
+              <View style={[S.barGlow, { left: `${Math.max(0, pct - 6)}%` }]} />
+            </View>
+            <View style={S.pctRow}>
+              <ActivityIndicator color="#69f0ae" size="small" />
+              <Text style={S.pct}>{pct}% complete</Text>
+            </View>
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </>
   )
 }
 
@@ -94,7 +115,7 @@ export const LanguageProvider = ({ children }) => {
 
     // Fast path: built-in static translations
     if (translations[code]) {
-      setT(translations[code])
+      setT(createTranslationProxy(code, translations.en))
       setLangState(code)
       return
     }
@@ -102,7 +123,7 @@ export const LanguageProvider = ({ children }) => {
     // Check AsyncStorage cache (for dynamically translated languages)
     const cached = await getCachedTranslation(code)
     if (cached) {
-      setT(cached)
+      setT(createTranslationProxy(code, translations.en))
       setLangState(code)
       return
     }
@@ -120,10 +141,10 @@ export const LanguageProvider = ({ children }) => {
         setProgressTotal(all)
       })
       await cacheTranslation(code, translated)
-      setT(translated)
+      setT(createTranslationProxy(code, { ...translations.en, ...translated }))
       setLangState(code)
     } catch {
-      setT(translations.en)
+      setT(createTranslationProxy('en', translations.en))
       setLangState('en')
     } finally {
       setLoading(false)
