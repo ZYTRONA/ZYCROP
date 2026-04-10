@@ -14,7 +14,7 @@
 //  LOCAL IMAGE MAPPING
 //  Maps disease names to actual local image files
 // ═══════════════════════════════════════════════════════════════
-const localImages = {
+export const localImages = {
   // Leaf Blight - 4 crop-specific images
   'Leaf Blight': {
     primary: require('./disease_library/leaf blight/rice leaf blight.webp'),
@@ -202,16 +202,6 @@ const localImages = {
     ],
   },
 };
-
-// ═══════════════════════════════════════════════════════════════
-//  VALIDATION LOG — Verify images are loaded
-// ═══════════════════════════════════════════════════════════════
-if (__DEV__) {
-  console.log('✅ Disease Library Images Module Loaded');
-  Object.entries(localImages).forEach(([disease, images]) => {
-    console.log(`📷 ${disease}: primary=${typeof images.primary}, ${images.images?.length || 0} variants`);
-  });
-}
 
 // ═══════════════════════════════════════════════════════════════
 //  DISEASE DATA — Complete information for all diseases
@@ -832,4 +822,5 @@ export default {
   getDiseasesByCategory,
   filterDiseasesByCategory,
   searchDiseases,
+  localImages,
 };

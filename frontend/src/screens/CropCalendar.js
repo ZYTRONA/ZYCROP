@@ -1,18 +1,13 @@
-/**
- * CropCalendar.js — Full Agronomic Calendar for 10 Major Crops
- * Week-by-week cultivation schedules with NPK, pest alerts, and harvest data
- */
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useLang } from '../context/LanguageContext';
-import { colors, spacing, radius, textStyle, shadow } from '../theme/tokens';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { colors, spacing, radius, textStyle } from '../theme/tokens';
 import { ChipFilterRow, Badge } from '../components/ui';
 
-// ─── Full 10-Crop Dataset ────────────────────────────────────
+// ─── Full 15-Crop Dataset (India's Major Crops) ────────────────────────────────
 const CROPS = [
   {
     name: 'Tomato', icon: 'food-apple', color: '#e53935',
@@ -183,6 +178,89 @@ const CROPS = [
     ],
     pests: ['Thrips', 'Chili Fruit Borer', 'Yellow Mite', 'Anthracnose (Colletotrichum)', 'Powdery Mildew'],
   },
+  {
+    name: 'Potato', icon: 'potato', color: '#78683f',
+    season: 'Rabi', sow: 'Oct–Nov', harvest: 'Jan–Feb',
+    duration: '90–120 days', spacing: '60×20 cm', waterMM: '400–600 mm',
+    npk: 'N:150 P:75 K:150 kg/ha', yield: '20–25 t/ha',
+    schedule: [
+      { phase: 'Seed Prep', days: 'Day 0', type: 'sow', title: 'Seed Certification', desc: 'Use certified seed tubers. Disease-free: Fusarium, Verticillium, Scab tested. Weight: 20–25 gm/seed piece. Cut 2 days before planting.' },
+      { phase: 'Land Prep', days: 'Day 0–5', type: 'sow', title: 'Field Preparation', desc: 'Deep plough 3×. FYM 15 t/ha. DAP 75 kg/ha + MOP 75 kg/ha as basal. Form ridges 60 cm apart.' },
+      { phase: 'Planting', days: 'Day 5–10', type: 'sow', title: 'Seed Piece Sowing', desc: 'Plant seed pieces 5 cm deep on ridges. Spacing: 60×20 cm. 25 kg seed tubers/acre. Use Trichoderma for tuber treatment.' },
+      { phase: 'Emergence', days: 'Day 20–25', type: 'fertilize', title: 'Earthing Up + N', desc: 'Earth up ridges by 10 cm. Urea 50 kg/ha after emergence. Irrigate. Install pheromone traps for tuber moth.' },
+      { phase: 'Vegetative', days: 'Day 40–50', type: 'fertilize', title: 'Second Top Dress', desc: 'Urea 50 kg/ha + MOP 30 kg/ha. Spray Imidacloprid 1ml/L for aphid + whitefly. Boron 0.2% foliar.' },
+      { phase: 'Tuber Init.', days: 'Day 50–70', type: 'spray', title: 'Late Blight + Insects', desc: 'Mancozeb 75WP 2g/L fortnightly for blight (critical). Chlorpyrifos 1ml/L for cut worms. Maintain moisture.' },
+      { phase: 'Tuber Fill', days: 'Day 70–100', type: 'spray', title: 'Disease Management', desc: 'Continue blight spray every 10 days. Monitor for early blight. Stop irrigation 2 weeks before harvest.' },
+      { phase: 'Harvest', days: 'Day 90–120', type: 'harvest', title: 'Digging', desc: 'Harvest when foliage dries. Dig carefully to avoid tuber damage. Grade: Seed (20–25g), Table (>100g). Store at 4°C.' },
+    ],
+    pests: ['Late Blight (Phytophthora)', 'Early Blight (Alternaria)', 'Potato Aphid', 'Tuber Moth', 'Colorado Beetle'],
+  },
+  {
+    name: 'Soybean', icon: 'sprout', color: '#d4af37',
+    season: 'Kharif', sow: 'May–Jul', harvest: 'Oct–Nov',
+    duration: '90–110 days', spacing: '45×20 cm', waterMM: '400–600 mm',
+    npk: 'N:0 P:40 K:40 kg/ha', yield: '1.5–2.5 t/ha',
+    schedule: [
+      { phase: 'Land Prep', days: 'Day 0–5', type: 'sow', title: 'Seed Treatment', desc: 'Use certified variety (JS 20-29, MAUS-71). Treat with Rhizobium biofertilizer 5g/kg + Trichoderma 4g/kg. Inoculate 2 hours before sowing.' },
+      { phase: 'Sowing', days: 'Day 5–10', type: 'sow', title: 'Direct Sowing', desc: '45×20 cm spacing. 50 mm soil moisture after last rain. 12–13 kg seed/acre. Sow when soil moist. No N fertilizer (biological N fixation).' },
+      { phase: 'Emergence', days: 'Day 10–15', type: 'spray', title: 'Weed Control', desc: 'Pre-emergence: Pendimethalin 1kg a.i/ha. Post-emergence at V3: Imazethapyr 1L/ha. One hand weeding at 40 DAS.' },
+      { phase: 'Vegetative', days: 'Day 30–45', type: 'fertilize', title: 'Micronutrient Spray', desc: 'Zinc Sulphate 25 kg/ha. Gypsum 500 kg/ha for S deficiency. Molybdenum 1g/L foliar spray at V4.' },
+      { phase: 'Flowering', days: 'Day 50–60', type: 'spray', title: 'Pod Borer Control', desc: 'Monitor for pod borer (Helicoverpa). Emamectin 0.4g/L or Spinosad 1ml/L if >2 larvae/plant. Neem oil 5% as preventive.' },
+      { phase: 'Pod Fill', days: 'Day 70–85', type: 'spray', title: 'Septoria Leaf Spot', desc: 'Mancozeb 2g/L for leaf spot if humidity > 80%. Avoid overhead irrigation. Monitor moisture stress.' },
+      { phase: 'Maturity', days: 'Day 90–100', type: 'harvest', title: 'Harvest Ready', desc: 'Pods turn brown, 75% mature at harvest. Moisture 12–13%. Mechanized harvesting preferred. Immediate threshing.' },
+    ],
+    pests: ['Pod Borer (Helicoverpa)', 'Leaf Beetle', 'Septoria Leaf Spot', 'Yellow Mosaic Virus', 'Root Rot (Rhizoctonia)'],
+  },
+  {
+    name: 'Mustard', icon: 'leaf', color: '#c9a961',
+    season: 'Rabi', sow: 'Oct–Nov', harvest: 'Feb–Mar',
+    duration: '120–150 days', spacing: '45×20 cm', waterMM: '350–450 mm',
+    npk: 'N:80 P:40 K:40 kg/ha', yield: '1.2–1.8 t/ha',
+    schedule: [
+      { phase: 'Land Prep', days: 'Day 0–5', type: 'sow', title: 'Field Preparation', desc: 'Plough 2–3 times. Form ridges 45 cm apart. FYM 10 t/ha. DAP 40 kg/ha + MOP 40 kg/ha. Use hybrid seed (MAHYCO, Bayer).' },
+      { phase: 'Sowing', days: 'Day 5–10', type: 'sow', title: 'Seed Sowing', desc: '45×20 cm spacing. 3 kg seed/ha (hybrid varieties). Drill sowing preferred. Sow in moisture. Cover with soil mulch.' },
+      { phase: 'Emergence', days: 'Day 15–20', type: 'spray', title: 'Weed Management', desc: 'Pre-emergence: Isoproturon 1kg a.i/ha. First weeding at 30 DAS. Second weeding at 50 DAS (thinning to 1 plant/hill).' },
+      { phase: 'Vegetative', days: 'Day 30–45', type: 'fertilize', title: 'Top Dress N', desc: 'Urea 40 kg/ha at 30 DAS. Gypsum 250 kg/ha for S nutrition (mustard is S-hungry). Zinc Sulphate 25 kg/ha.' },
+      { phase: 'Flowering', days: 'Day 60–75', type: 'spray', title: 'Pest + Disease Control', desc: 'Diamondback moth larvae: Emamectin 0.4g/L. Alternaria leaf spot: Mancozeb 2g/L. Borax 0.2% for boron. Bee-friendly spraying.' },
+      { phase: 'Pod Dev.', days: 'Day 85–110', type: 'spray', title: 'Sclerotia Management', desc: 'White rust: Mancozeb 2g/L. Stem rot (Sclerotinia): Carbendazim 1g/L. Stop irrigation 15 days before harvest.' },
+      { phase: 'Harvest', days: 'Day 120–150', type: 'harvest', title: 'Harvesting', desc: 'Pods turn brown, seeds black. Moisture 8–10%. Harvest when 80% pods mature. Dry for 7 days, thresh and store in cool place.' },
+    ],
+    pests: ['Diamondback Moth', 'Mustard Sawfly', 'White Rust (Albugo)', 'Sclerotinia Rot', 'Alternaria Leaf Spot'],
+  },
+  {
+    name: 'Chickpea (Gram)', icon: 'seed', color: '#a67c3b',
+    season: 'Rabi', sow: 'Oct–Nov', harvest: 'Feb–Mar',
+    duration: '110–140 days', spacing: '30×10 cm', waterMM: '300–400 mm',
+    npk: 'N:0 P:40 K:40 kg/ha', yield: '1.5–2.0 t/ha',
+    schedule: [
+      { phase: 'Seed Prep', days: 'Day 0', type: 'sow', title: 'Seed Treatment', desc: 'Use certified seed (Virat, Kabuli type). Treat with Rhizobium sp. (chickpea-specific) 5g/kg + Trichoderma 4g/kg. Inoculate 2 hours before sowing.' },
+      { phase: 'Land Prep', days: 'Day 0–5', type: 'sow', title: 'Field Preparation', desc: 'Plough 2–3 times for good tilth. Ensure drainage (susceptible to waterlogging). No N fertilizer (symbiotic fixation). DAP 40 kg/ha + MOP 40 kg/ha.' },
+      { phase: 'Sowing', days: 'Day 5–10', type: 'sow', title: 'Seed Sowing', desc: '30×10 cm spacing. 15 kg seed/acre. Plant in cool October. Moisture retention essential. Line sowing preferred.' },
+      { phase: 'Emergence', days: 'Day 20–30', type: 'spray', title: 'Weed Control', desc: 'One hand weeding at 30 DAS. Pre-emergence: Trifluralin 1kg a.i/ha. Thin to 1 plant/hill if needed. Remove diseased seedlings.' },
+      { phase: 'Vegetative', days: 'Day 40–60', type: 'fertilize', title: 'Micronutrient Boost', desc: 'Gypsum 250 kg/ha (Ca, S requirement). Zinc Sulphate 25 kg/ha. Boron 1 kg/ha if deficient. Molybdenum 1g/L foliar.' },
+      { phase: 'Flowering', days: 'Day 70–85', type: 'spray', title: 'Gram Pod Borer Control', desc: 'Pod borer (Helicoverpa): Emamectin 0.4g/L when 5% flowers open. Chlorpyrifos 1ml/L. Avoid continuous flowering-time rainy periods.' },
+      { phase: 'Pod Dev.', days: 'Day 90–120', type: 'spray', title: 'Disease Watch', desc: 'Fusarium wilt: Carbendazim 1g/L soil drench if detected. Ascochyta blight: Mancozeb 2g/L. Avoid overhead irrigation.' },
+      { phase: 'Harvest', days: 'Day 110–140', type: 'harvest', title: 'Harvesting', desc: 'Pods turn brown at 80% maturity. Moisture 10–12%. Manual or mechanical harvesting. Dry for 7 days, thresh, store in dry condition.' },
+    ],
+    pests: ['Gram Pod Borer (Helicoverpa)', 'Gram Leaf Roller', 'Ascochyta Blight', 'Fusarium Wilt', 'Root Rot'],
+  },
+  {
+    name: 'Pigeon Pea (Arhar)', icon: 'sprout-outline', color: '#e67e22',
+    season: 'Kharif + Rabi', sow: 'May–Jul / Oct–Nov', harvest: 'Nov–Dec / Feb–Mar',
+    duration: '180–220 days', spacing: '60×30 cm', waterMM: '400–600 mm',
+    npk: 'N:0 P:40 K:40 kg/ha', yield: '1.0–1.5 t/ha',
+    schedule: [
+      { phase: 'Seed Prep', days: 'Day 0', type: 'sow', title: 'Seed Selection', desc: 'Use certified varieties (Asha, ICPL-87, Hybrid ICPH). Treat with Rhizobium sp. (arhar-specific) 600g inoculum/acre + Trichoderma 4g/kg.' },
+      { phase: 'Land Prep', days: 'Day 0–10', type: 'sow', title: 'Field Preparation', desc: 'Deep plough 2–3 times. Form raised beds. FYM 10 t/ha. No basal N (biological fixation). DAP 40 kg/ha + MOP 40 kg/ha. Gypsum 250 kg/ha.' },
+      { phase: 'Sowing', days: 'Day 10–15', type: 'sow', title: 'Direct Sowing', desc: '60×30 cm spacing. 12–15 kg seed/acre. Sow with onset of monsoon (Kharif) or early winter (Rabi). Seed rate per hole: 2–3 seeds.' },
+      { phase: 'Emergence', days: 'Day 20–35', type: 'spray', title: 'Weed + Pest Management', desc: 'One hand weeding at 30–40 DAS. Thin to 1 plant/hill. Pre-emergence: Pendimethalin 1kg a.i/ha. Spray neem oil 5% against early spider mite.' },
+      { phase: 'Vegetative', days: 'Day 60–90', type: 'fertilize', title: 'Micronutrient Spray', desc: 'Zinc Sulphate 25 kg/ha (Kharif). Boron 1 kg/ha if deficiency symptoms. Molybdenum 1g/L foliar spray at V8. Sulfur dust 25 kg/ha for spider mite.' },
+      { phase: 'Flowering', days: 'Day 100–130', type: 'spray', title: 'Pod Borer + Disease', desc: 'Spodoptera (army worm): Emamectin 0.4g/L or SpinTor 0.5ml/L. Phytophthora blight (wet season): Metalaxyl 2.5g/L. Powdery mildew: Sulfur 25 kg/ha.' },
+      { phase: 'Pod Fill', days: 'Day 140–180', type: 'spray', title: 'Late Blight + Sterility', desc: 'Monitor for sterility mosaic virus (aphid vector: Imidacloprid 1ml/L). Mycoplasma wilt: Remove infected plants. Avoid water stress during grain fill.' },
+      { phase: 'Harvest', days: 'Day 180–220', type: 'harvest', title: 'Harvesting', desc: 'Pods turn brown, seeds hard. Moisture 10–12%. Harvest when 80% pods mature. Dry for 10 days, thresh carefully. Store in clean containers.' },
+    ],
+    pests: ['Spodoptera (Army Worm)', 'Stem Fly', 'Phytophthora Blight', 'Sterility Mosaic Virus', 'Mycoplasma Wilt'],
+  },
 ];
 
 const TASK_COLORS = {
@@ -192,6 +270,7 @@ const TASK_COLORS = {
   harvest:  { bg: '#fce4ec', icon: 'content-cut',     color: '#c2185b', badge: 'danger' },
 };
 
+// Crop Info Card
 function CropInfoCard({ crop }) {
   return (
     <View style={ci.card}>
@@ -221,8 +300,10 @@ const ci = StyleSheet.create({
   value: { flex: 1, fontWeight: '600', fontSize: 13 },
 });
 
+// Task Card (simple, no completion tracking)
 function TaskCard({ task }) {
   const { bg, icon, color, badge } = TASK_COLORS[task.type] || TASK_COLORS.sow;
+
   return (
     <View style={[tc.card, { backgroundColor: bg }]}>
       <View style={[tc.icon, { backgroundColor: color + '20' }]}>
@@ -230,7 +311,9 @@ function TaskCard({ task }) {
       </View>
       <View style={tc.content}>
         <View style={tc.header}>
-          <Text style={[textStyle.body(), { fontWeight: '700', color, flex: 1 }]}>{task.title}</Text>
+          <Text style={[textStyle.body(), { fontWeight: '700', color, flex: 1 }]}>
+            {task.title}
+          </Text>
           <Badge label={task.type} variant={badge} size="sm" />
         </View>
         <Text style={[textStyle.bodySmall(), { color: colors.textMuted, marginVertical: 2 }]}>
@@ -243,6 +326,7 @@ function TaskCard({ task }) {
     </View>
   );
 }
+
 const tc = StyleSheet.create({
   card: { borderRadius: radius.lg, padding: spacing.md, marginBottom: spacing.md, flexDirection: 'row', gap: spacing.md, elevation: 1, shadowColor: '#000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: 1 }, shadowRadius: 3 },
   icon: { width: 48, height: 48, borderRadius: radius.md, justifyContent: 'center', alignItems: 'center' },
@@ -250,6 +334,7 @@ const tc = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: 2 },
 });
 
+// Pest Section
 function PestSection({ pests, color }) {
   return (
     <View style={ps.card}>
@@ -273,63 +358,45 @@ const ps = StyleSheet.create({
   dot: { width: 8, height: 8, borderRadius: 4 },
 });
 
+// Main Screen
 export default function CropCalendar({ navigation }) {
-  const { t } = useLang();
   const [selectedIdx, setSelectedIdx] = useState(0);
   const crop = CROPS[selectedIdx];
 
   return (
-    <SafeAreaView style={s.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
-
-      {/* Header */}
-      <View style={s.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={s.backBtn} hitSlop={10}>
-          <Feather name="arrow-left" size={22} color="#fff" />
-        </TouchableOpacity>
-        <View style={s.headerTitle}>
-          <Text style={[textStyle.h2({ color: '#fff' })]}>Crop Calendar</Text>
-          <Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, marginTop: 2 }}>
-            Full agronomic schedule · {CROPS.length} crops
-          </Text>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.surface} />
+      
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={textStyle.h1()}>Crop Calendar</Text>
         </View>
-      </View>
 
-      {/* Crop selector chips */}
-      <View style={s.chipsWrap}>
+        {/* Crop Selector */}
         <ChipFilterRow
           options={CROPS.map(c => c.name)}
           selected={selectedIdx}
-          onSelect={setSelectedIdx}
+          onSelect={(idx) => setSelectedIdx(idx)}
           keyNames={CROPS.map(c => c.name)}
         />
-      </View>
 
-      <ScrollView style={s.scroll} contentContainerStyle={{ paddingBottom: 100 }}>
-        {/* Crop identity header */}
-        <View style={[s.cropBanner, { backgroundColor: crop.color + '18', borderColor: crop.color + '30' }]}>
-          <MaterialCommunityIcons name={crop.icon} size={40} color={crop.color} />
-          <View style={{ flex: 1, marginLeft: spacing.md }}>
-            <Text style={[textStyle.h2(), { color: crop.color }]}>{crop.name}</Text>
-            <Text style={[textStyle.bodySmall(), { color: colors.textMuted }]}>{crop.season}</Text>
-          </View>
-          <View>
-            <Text style={[textStyle.bodySmall(), { color: colors.textMuted, textAlign: 'right' }]}>Yield target</Text>
-            <Text style={[textStyle.body(), { fontWeight: '700', color: crop.color, textAlign: 'right' }]}>{crop.yield}</Text>
-          </View>
+        {/* Crop Info */}
+        <View style={{ paddingHorizontal: spacing.md }}>
+          <CropInfoCard crop={crop} />
         </View>
 
+        {/* Cultivation Schedule */}
         <View style={{ paddingHorizontal: spacing.md }}>
-          {/* Quick info */}
-          <Text style={[textStyle.h3(), s.sectionLabel]}>Crop Overview</Text>
-          <CropInfoCard crop={crop} />
+          <Text style={[textStyle.h3(), { marginBottom: spacing.md }]}>Cultivation Schedule</Text>
+          {crop.schedule.map((task, idx) => (
+            <TaskCard key={idx} task={task} />
+          ))}
+        </View>
 
-          {/* Schedule */}
-          <Text style={[textStyle.h3(), s.sectionLabel]}>Cultivation Schedule</Text>
-          {crop.schedule.map((task, i) => <TaskCard key={i} task={task} />)}
-
-          {/* Pest threats */}
-          <Text style={[textStyle.h3(), s.sectionLabel]}>Pest & Disease Alerts</Text>
+        {/* Pest & Disease Alerts */}
+        <View style={{ paddingHorizontal: spacing.md }}>
+          <Text style={[textStyle.h3(), { marginBottom: spacing.md }]}>Pest & Disease Alerts</Text>
           <PestSection pests={crop.pests} color={crop.color} />
         </View>
       </ScrollView>
@@ -337,13 +404,8 @@ export default function CropCalendar({ navigation }) {
   );
 }
 
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.surfaceAlt },
-  header: { backgroundColor: colors.primary, paddingHorizontal: spacing.md, paddingVertical: spacing.md, flexDirection: 'row', alignItems: 'center' },
-  backBtn: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
-  headerTitle: { flex: 1, marginLeft: spacing.sm },
-  chipsWrap: { backgroundColor: colors.primary, paddingBottom: spacing.md },
-  scroll: { flex: 1 },
-  cropBanner: { margin: spacing.md, borderRadius: radius.xl || 24, padding: spacing.md, flexDirection: 'row', alignItems: 'center', borderWidth: 1 },
-  sectionLabel: { marginBottom: spacing.sm, marginTop: spacing.sm },
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.bg },
+  content: { padding: 0 },
+  header: { paddingHorizontal: spacing.md, paddingVertical: spacing.lg },
 });
