@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Any, List, Optional, Dict
 
 from detection.base import Detection, DetectionResult
-from detection.yolo_detector import YOLODetector
+from detection.tensorflow_leaf_detector import TensorFlowLeafDetector  # NEW: TensorFlow detector
 from detection.disease_classifier import DiseaseClassifier
 from config import DETECTION_CONFIG
 from utils.logger import detection_logger, performance_logger, error_logger
@@ -73,25 +73,39 @@ class DetectionPipeline:
     
     def __init__(
         self,
+        use_tensorflow: bool = True,  # NEW: Use TensorFlow instead of YOLO
         yolo_model_size: str = 'm',
         yolo_conf: Optional[float] = None,
+        tf_leaf_conf: Optional[float] = 0.5,  # NEW: TensorFlow threshold
         disease_conf: Optional[float] = None
     ):
         """Initialize pipeline.
         
         Args:
+            use_tensorflow: Use TensorFlow leaf detector instead of YOLO (NEW)
             yolo_model_size: YOLO model size (nano, small, medium, large)
             yolo_conf: YOLO confidence threshold override
+            tf_leaf_conf: TensorFlow leaf detector threshold (NEW)
             disease_conf: Disease classifier confidence threshold override
         """
+        self.use_tensorflow = use_tensorflow
         self.yolo_conf = yolo_conf or DETECTION_CONFIG['yolo']['confidence_threshold']
+        self.tf_leaf_conf = tf_leaf_conf
         self.disease_conf = disease_conf or DETECTION_CONFIG['disease_classifier']['confidence_threshold']
         
-        # Initialize detectors
-        self.yolo_detector = YOLODetector(
-            model_name=yolo_model_size,
-            confidence_threshold=self.yolo_conf
-        )
+        # Initialize detectors (NEW: Use TensorFlow by default)
+        if self.use_tensorflow:
+            self.leaf_detector = TensorFlowLeafDetector(
+                model_path="models/leaf_detector.tflite",
+                confidence_threshold=self.tf_leaf_conf
+            )
+        else:
+            from detection.yolo_detector import YOLODetector  # Fallback to YOLO
+            self.leaf_detector = YOLODetector(
+                model_name=yolo_model_size,
+                confidence_threshold=self.yolo_conf
+            )
+        
         self.disease_classifier = DiseaseClassifier(
             confidence_threshold=self.disease_conf
         )
@@ -106,12 +120,14 @@ class DetectionPipeline:
         """
         try:
             print("\n[INIT] Initializing Detection Pipeline...")
+            print(f"[INFO] Using {'TensorFlow' if self.use_tensorflow else 'YOLO'} leaf detector")
             
-            # Load YOLO
-            yolo_ok = self.yolo_detector.load()
-            if not yolo_ok:
-                error_logger.log_error('pipeline', Exception("YOLO load failed"), None)
-                print("[ERROR] YOLO detector failed to load")
+            # Load leaf detector (TensorFlow or YOLO)
+            detector_ok = self.leaf_detector.load()
+            if not detector_ok:
+                detector_name = 'TensorFlow' if self.use_tensorflow else 'YOLO'
+                error_logger.log_error('pipeline', Exception(f"{detector_name} load failed"), None)
+                print(f"[ERROR] {detector_name} detector failed to load")
             
             # Load disease classifier
             classifier_ok = self.disease_classifier.load()
@@ -119,7 +135,7 @@ class DetectionPipeline:
                 error_logger.log_error('pipeline', Exception("Classifier load failed"), None)
                 print("[ERROR] Disease classifier failed to load")
             
-            self.is_initialized = yolo_ok and classifier_ok
+            self.is_initialized = detector_ok and classifier_ok
             
             if self.is_initialized:
                 print("[OK] Pipeline initialized successfully\n")
@@ -135,8 +151,10 @@ class DetectionPipeline:
     def shutdown(self) -> None:
         """Shutdown and cleanup all models."""
         print("[SHUTDOWN] Cleaning up pipeline...")
-        self.yolo_detector.unload()
-        self.disease_classifier.unload()
+        if self.leaf_detector:  # UPDATED: Use leaf_detector instead of yolo_detector
+            self.leaf_detector.unload()
+        if self.disease_classifier:
+            self.disease_classifier.unload()
         print("[OK] Pipeline shutdown complete")
     
     def process_image(
@@ -184,24 +202,30 @@ class DetectionPipeline:
                 'channels': image_array.shape[2] if len(image_array.shape) > 2 else 1,
             }
             
-            # ─ Stage 1: YOLO Detection ────────────────────────────────────────
+            # ─ Stage 1: Leaf Detection ────────────────────────────────────────
             yolo_start = time.time()
-            yolo_result = self.yolo_detector.detect(image_array)
-            yolo_time = time.time() - yolo_start
+            detector_result = self.leaf_detector.detect(image_array)  # UPDATED: Use leaf_detector
             
-            detections = yolo_result.detections
+            # Unpack
+            detections = detector_result.detections
             detections_count = len(detections)
             
-            performance_logger.log_performance('pipeline', 'yolo_stage', yolo_time)
-            print(f"[YOLO] Detected {detections_count} potential leaves in {yolo_time:.3f}s")
+            detector_time = time.time() - yolo_start
             
+            detector_name = 'TensorFlow' if self.use_tensorflow else 'YOLO'
+            performance_logger.log_performance('pipeline', f'{detector_name.lower()}_stage', detector_time)
+            print(f"[{detector_name}] Detected {detections_count} potential leaves in {detector_time:.3f}s")
+            
+            # ─ No leaves detected → Return immediately ─
             if detections_count == 0:
+                detector_name = 'TensorFlow' if self.use_tensorflow else 'YOLO'
+                print(f"[INFO] No leaves detected by {detector_name}")
                 return PipelineResult(
                     total_time=time.time() - pipeline_start,
                     detections_count=0,
                     analyzed_count=0,
                     leaves=[],
-                    errors=[],
+                    errors=errors,
                     image_info=image_info
                 )
             
@@ -231,6 +255,7 @@ class DetectionPipeline:
                                     {'name': name, 'confidence': round(conf, 3)}
                                     for name, conf in (disease_result.top_k_predictions or [])
                                 ],
+                                'disease_info': disease_result.disease_info,  # ADDED: Include disease info
                             },
                             leaf_index=leaf_idx,
                             analysis_time=classify_time,
@@ -250,6 +275,30 @@ class DetectionPipeline:
                         error_msg = f"Classification failed for leaf {leaf_idx}: {str(e)}"
                         errors.append(error_msg)
                         error_logger.log_error('pipeline', e, {'leaf_index': leaf_idx})
+                        
+                        # Get fallback disease instead of giving up
+                        print(f"[FALLBACK] Leaf {leaf_idx} classification failed, using fallback disease")
+                        fallback_result = self.disease_classifier._get_fallback_disease()
+                        
+                        # Create analysis result with fallback disease
+                        analysis = LeafAnalysisResult(
+                            detection=detection,
+                            disease_prediction={
+                                'disease': fallback_result.class_name,
+                                'confidence': round(fallback_result.confidence, 3),
+                                'top_predictions': [
+                                    {'name': name, 'confidence': round(conf, 3)}
+                                    for name, conf in (fallback_result.top_k_predictions or [])
+                                ],
+                                'disease_info': fallback_result.disease_info,
+                            },
+                            leaf_index=leaf_idx,
+                            analysis_time=0.0,
+                            confidence_composite=round(
+                                (detection.confidence + fallback_result.confidence) / 2, 3
+                            )
+                        )
+                        leaves.append(analysis)
                 else:
                     # Just use detections
                     leaves = [

@@ -66,6 +66,8 @@ class ClassificationResult:
     confidence: float
     top_k_predictions: Optional[List[tuple[str, float]]] = None
     inference_time: float = 0.0
+    disease_info: Optional[dict[str, Any]] = None
+    source: str = "local"  # NEW: Track source - "local", "plantid", or "offline"
     
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
@@ -77,6 +79,8 @@ class ClassificationResult:
                 {'name': name, 'confidence': round(conf, 3)}
                 for name, conf in (self.top_k_predictions or [])
             ],
+            'disease_info': self.disease_info or {},
+            'source': self.source,  # NEW: Include source in response
         }
 
 

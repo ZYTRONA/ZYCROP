@@ -113,6 +113,18 @@ except ImportError as e:
     initialize_pipeline = None
     shutdown_pipeline = None
 
+
+# ─── Health Check Endpoint ────────────────────────────────────────────────────
+@app.get("/api/health")
+async def health_check():
+    """Simple health check endpoint for debugging network issues."""
+    return {
+        "status": "ok",
+        "message": "ZYCROP Backend is running",
+        "version": "2.0.0",
+    }
+
+
 # ─── Startup & Shutdown Handlers ──────────────────────────────────────────────
 @app.on_event("startup")
 async def startup_event():

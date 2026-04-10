@@ -201,7 +201,12 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
                   </Text>
                 )}
               </View>
-              <Badge label={disease.severity} variant={severityVariant} size="md" />
+              <View style={{ gap: sp.sm }}>
+                <Badge label={disease.severity} variant={severityVariant} size="md" />
+                {disease.sourceBadge && (
+                  <Badge label={disease.sourceBadge} variant="info" size="sm" />
+                )}
+              </View>
             </View>
 
             {/* Confidence Bar */}
@@ -318,10 +323,10 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
       setAnalyzing(true);
       await speakAnalyzing?.();
 
-      // Capture photo from camera
+      // Capture photo from camera with high quality for backend analysis
       const photo = await cameraRef.current.takePictureAsync({
-        quality: 0.8,
-        base64: true,
+        quality: 1,
+        base64: false,
         exif: false,
       });
 
@@ -333,16 +338,12 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
         name: 'leaf_photo.jpg',
       });
       formData.append('farmer_id', 'MOBILE_USER');
-      formData.append('analyze_all', true);
+      formData.append('analyze_all', 'true');
 
       // Call backend detection API
       const response = await fetch(`${BACKEND_API_URL}/api/diagnose`, {
         method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
         body: formData,
-        timeout: 30000, // 30 second timeout
       });
 
       if (!response.ok) {
@@ -351,16 +352,24 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
       }
 
       const result = await response.json();
+      
+      console.log('Backend response:', JSON.stringify(result, null, 2));
 
       // Map backend response to disease object format
       let detectedDisease = null;
 
-      if (result.primary_disease && result.primary_confidence >= 0.3) {
-        // Use the primary disease detected
+      // Try primary disease first (highest confidence)
+      if (result.primary_disease && result.primary_confidence) {
+        console.log(`Detected primary disease: ${result.primary_disease} (confidence: ${result.primary_confidence}) from ${result.source || 'local'}`);
+        const source = result.source || 'local';
+        const sourceBadge = source === 'plantid' ? '🌿 Plant.id' : 
+                           source === 'mock' ? '📋 Mock Data' :
+                           source === 'offline' ? '📱 Offline' : '🤖 Local AI';
+        
         detectedDisease = {
           id: result.primary_disease.toLowerCase().replace(/\s+/g, '_'),
           disease: result.primary_disease,
-          pathogen: 'AI Detected', // Backend doesn't return this, using placeholder
+          pathogen: 'AI Detected',
           severity: result.primary_confidence >= 0.8 ? 'High' : 
                     result.primary_confidence >= 0.6 ? 'Moderate' : 'Mild',
           confidence: Math.round(result.primary_confidence * 100),
@@ -368,15 +377,21 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
                  result.primary_confidence >= 0.6 ? '#f57c00' : '#fbc02d',
           crop: _selectedCrop,
           capturedImage: photo.uri,
-          treatment_plan: `Detected via YOLOv8 AI Scan with ${result.detections_found} leaf detection(s). Consult local agricultural expert for specific treatment.`,
+          treatment_plan: `Detected via ${sourceBadge} with ${result.detections_found} leaf detection(s).`,
           fertilizer: `Apply balanced fertilizer (NPK ratio based on soil test). Monitor plant health daily.`,
           organic_alt: `Consider organic pest management and crop rotation strategies suitable for your region.`,
-          // Store backend response data
+          source: source,
+          sourceBadge: sourceBadge,
           backendData: result,
         };
-      } else if (result.detections_found > 0) {
-        // Fallback: Use first detected leaf's disease info
+      }
+      // Fallback: Try first detected leaf's disease info
+      else if (result.leaves && result.leaves.length > 0 && result.detections_found > 0) {
         const firstLeaf = result.leaves[0];
+        const source = result.source || 'local';
+        const sourceBadge = source === 'plantid' ? '🌿 Plant.id' : source === 'offline' ? '📱 Offline' : '🤖 Local AI';
+        
+        console.log(`No primary disease, using first leaf disease: ${firstLeaf.disease?.disease} from ${source}`);
         if (firstLeaf && firstLeaf.disease) {
           detectedDisease = {
             id: firstLeaf.disease.disease.toLowerCase().replace(/\s+/g, '_'),
@@ -389,22 +404,36 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
                    firstLeaf.composite_confidence >= 0.6 ? '#f57c00' : '#fbc02d',
             crop: _selectedCrop,
             capturedImage: photo.uri,
-            treatment_plan: `Leaf detected (${firstLeaf.leaf_id}). Consult local agricultural expert for specific treatment.`,
+            treatment_plan: `Leaf detected (${firstLeaf.leaf_id}). Disease detected with ${sourceBadge} analysis.`,
             fertilizer: `Apply balanced fertilizer based on soil test results.`,
             organic_alt: `Consider organic pest management strategies suitable for your region.`,
+            source: source,  // NEW: Include source
+            sourceBadge: sourceBadge,  // NEW: Include badge
             backendData: result,
           };
         }
       }
 
+      // Show detected disease or error
       if (detectedDisease) {
+        console.log(`Showing detected disease: ${detectedDisease.disease}`);
         onDetectDisease(detectedDisease);
         await speakDiseaseResult?.(detectedDisease.disease);
-      } else {
-        // No disease detected, show alert
+      } else if (result.detections_found === 0 || result.status === 'no_leaf_detected') {
+        // No leaves detected - show helpful suggestions
+        console.log(`No leaves detected (detections_found: ${result.detections_found})`);
+        const suggestions = result.errors?.join('\n') || 'Please try capturing a clearer image of the leaf';
         Alert.alert(
-          'Unable to Detect Disease',
-          `Leaves detected: ${result.detections_found}\n\nPlease try:\n• Clearer image\n• Better lighting\n• Position leaf in center`
+          'No Leaf Detected 🍃',
+          suggestions,
+          [{ text: 'Try Again', onPress: () => {} }]
+        );
+      } else {
+        // Leaves detected but couldn't process
+        console.log(`Leaves found but couldn't process: ${result.detections_found} detections`);
+        Alert.alert(
+          'Unable to Process',
+          `Leaves detected: ${result.detections_found}\n\nPlease try again with a clearer image`
         );
       }
 
@@ -412,15 +441,25 @@ function CameraScreen({ onClose, _selectedCrop, onDetectDisease }) {
     } catch (error) {
       console.error('Capture error:', error);
       
-      // Check if it's a network error
-      if (error.message.includes('Network') || error.message.includes('timeout')) {
-        Alert.alert(
-          'Backend Unavailable',
-          'AI detection requires backend connection.\n\nMake sure:\n1. Backend server is running\n2. BACKEND_API_URL in config.js is correct\n3. Network is available'
-        );
-      } else {
-        Alert.alert('Detection Error', error.message || 'Failed to analyze image');
+      // Check error type and provide specific guidance
+      let errorTitle = 'Detection Error';
+      let errorMessage = error.message || 'Failed to analyze image';
+      
+      if (!error.response && (error.message.includes('Network') || error.message.includes('timeout') || error.code === 'ECONNREFUSED')) {
+        errorTitle = 'Backend Connection Error';
+        errorMessage = 'Cannot connect to backend server.\n\nPlease ensure:\n1. Backend is running (port 8888)\n2. You\'re connected to WiFi\n3. Phone can reach the server IP';
+      } else if (error.response?.status === 400) {
+        errorTitle = 'Invalid Image';
+        errorMessage = error.response?.data?.detail || 'Image format or size issue. Try a different photo.';
+      } else if (error.response?.status === 500) {
+        errorTitle = 'Server Error';
+        errorMessage = error.response?.data?.detail || 'Backend processing failed. Try again or check server logs.';
+      } else if (error.message.includes('Image too')) {
+        errorTitle = 'Image Size Error';
+        errorMessage = error.message;
       }
+      
+      Alert.alert(errorTitle, errorMessage);
     } finally {
       setAnalyzing(false);
     }

@@ -1,10 +1,9 @@
 import axios from 'axios'
+import { BACKEND_API_URL } from '../config'
 
 // ─── API Configuration ───────────────────────────────────────
-// For Android emulator (local machine): use 10.0.2.2
-// For physical device on LAN: use actual machine IP (e.g., 192.168.x.x)
-// For production: use your deployed backend URL
-const BASE_URL = 'http://10.0.2.2:8000/api'
+// Uses centralized backend URL from config.js and appends /api prefix.
+const BASE_URL = `${BACKEND_API_URL}/api`
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
