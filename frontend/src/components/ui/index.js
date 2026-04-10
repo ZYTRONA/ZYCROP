@@ -13,3 +13,4 @@ export { StatBox } from './StatBox';
 export { EmptyState } from './EmptyState';
 export { WaveformBars } from './WaveformBars';
 export { TypingDots } from './TypingDots';
+export { VoiceChatBubble } from './VoiceChatBubble';
