@@ -237,10 +237,11 @@ const TAB_LABEL_KEYS = {
 
 // ─── Tab Navigator ─────────────────────────────────────────────────────────────
 export default function TabNavigator() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   
   return (
     <Tab.Navigator
+      key={`tabNav-${lang}`}
       tabBar={props => <CustomTabBar {...props} />}
       screenOptions={({ route }) => {
         const labelKey = TAB_LABEL_KEYS[route.name]

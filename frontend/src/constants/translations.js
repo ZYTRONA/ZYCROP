@@ -358,6 +358,13 @@ export const translations = {
     weatherTemp: "வெப்பநிலை",
     weatherHumidity: "ஈரப்பதம்",
     weatherRain: "மழை",
+    
+    // ── Missing Tamil translations for pages ──
+    briefTitle: "AI பாகை சுருக்கம்",
+    briefText: "உயர் ஈரப்பதம் இன்று. தக்காளி செடிகளில் ஆரம்ப பூஞ்ச்சணு குறிகள் பரிசோdicயுங்கள்.",
+    btn_start_scanning: "ஸ்கேனிங் ஆரம்பிக்கவும்",
+    diseaseDetected: "நோய் கண்டறியப்பட்டது",
+    pathologist_location: "AI நோய் ஸ்கேனர்",
   },
   
   hi: {

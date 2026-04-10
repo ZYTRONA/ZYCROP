@@ -258,10 +258,10 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
             <View style={{ flex: 1, backgroundColor: '#F8F9FA', borderRadius: radius.md, padding: sp.md, alignItems: 'center' }}>
               <MaterialCommunityIcons name="microscope" size={24} color={colors.primary} />
               <Text style={[textStyle.bodySmall(), { marginTop: sp.sm, textAlign: 'center', fontWeight: '600', color: '#1A1A1A' }]}>
-                AI Scan
+                {t['pathologist_location'] || 'AI Scan'}
               </Text>
               <Text style={[textStyle.bodySmall(), { textAlign: 'center', color: '#666', fontSize: 12 }]}>
-                Detected
+                {t['diseaseDetected'] || 'Detected'}
               </Text>
             </View>
           </View>
@@ -327,6 +327,7 @@ function DiseaseResultModal({ visible, disease, onClose, t }) {
 
 // ─── Camera Screen Component ────────────────────────────────────
 function CameraScreen({ onClose, selectedCrop, onDetectDisease, t }) {
+  const { lang } = useLang();
   const [permission, requestPermission] = ExpoCamera.useCameraPermissions();
   const [analyzing, setAnalyzing] = useState(false);
   const cameraRef = useRef(null);
@@ -348,7 +349,7 @@ function CameraScreen({ onClose, selectedCrop, onDetectDisease, t }) {
       }
 
       setAnalyzing(true);
-      await speakAnalyzing?.();
+      await speakAnalyzing?.(lang);
 
       // Capture photo from camera
       const photo = await cameraRef.current.takePictureAsync({
@@ -399,7 +400,7 @@ function CameraScreen({ onClose, selectedCrop, onDetectDisease, t }) {
 
       console.log(`Offline detection: ${detectedDisease.disease} (${detectedDisease.confidence}% confidence)`);
       onDetectDisease(detectedDisease);
-      await speakDiseaseResult?.(detectedDisease.disease);
+      await speakDiseaseResult?.(detectedDisease.disease, detectedDisease.severity, lang);
       onClose();
     } catch (error) {
       console.error('Detection error:', error);
@@ -490,7 +491,7 @@ function CameraScreen({ onClose, selectedCrop, onDetectDisease, t }) {
 
 // ─── Main Pathologist Screen ────────────────────────────────────
 export default function Pathologist({ navigation }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { spacing: sp } = useResponsive();
 
   const [selectedCropIdx, setSelectedCropIdx] = useState(0);
@@ -603,11 +604,11 @@ export default function Pathologist({ navigation }) {
           style={[styles.btn, styles.btnPrimary]}
           onPress={() => {
             setShowCamera(true);
-            speakScanInstruction?.();
+            speakScanInstruction?.(lang);
           }}
         >
           <Feather name="camera" size={20} color="#fff" />
-          <Text style={styles.btnText}>Start Scanning</Text>
+          <Text style={styles.btnText}>{t['btn_start_scanning'] || 'Start Scanning'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
