@@ -13,7 +13,7 @@ GET  /api/pipeline/status - Check pipeline readiness
 ═══════════════════════════════════════════════════════════════════════════════
 """
 
-import requests
+import requests  # type: ignore
 import json
 from pathlib import Path
 

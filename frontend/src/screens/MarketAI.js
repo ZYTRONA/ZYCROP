@@ -1,9 +1,10 @@
 /**
- * MarketAI.js — Market Intelligence & Price Forecasting (Phase 6: Enhanced)
- * Real-time crop prices, 7-day trend forecasts, market analytics, and AI signals
+ * MarketAI.js — Market Intelligence & Price Forecasting (Phase 7: Real-time API)
+ * Real-time crop prices from Agmarknet API, 7-day forecasts, market analytics
  * Features:
- * - Live search bar with real-time filtering
+ * - Live search with real-time filtering
  * - 6 category chips (All, Vegetables, Grains, Fruits, Pulses, Spices)
+ * - Real-time market data from Agmarknet API with CSV fallback
  * - Summary metrics (avg price, markets tracked, price trend)
  * - Expandable price cards with detailed analytics
  * - AI market signals (Buy/Wait/Sell/Avoid)
@@ -12,11 +13,12 @@
  * - Bottom search guidance UI
  * - Responsive demand visualization and badges
  */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
   StatusBar, ActivityIndicator, RefreshControl, TextInput,
   Animated, LayoutAnimation, Platform, UIManager, Modal,
+  FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -24,6 +26,7 @@ import { useLang } from '../context/LanguageContext';
 import { useResponsive } from '../theme/responsive';
 import { colors, spacing, radius, textStyle, shadow } from '../theme/tokens';
 import { AIButton, ChipFilterRow, StatBox, Badge } from '../components/ui';
+import { getMarketComparison, setPriceAlert } from '../services/api';
 
 // Enable layout animations on Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -376,35 +379,7 @@ function PriceCard({ item, isExpanded, onToggle, onActionPress, t }) {
             </View>
           </View>
 
-          {/* 7-Day Trend Bars */}
-          <View style={{ marginVertical: spacing.md }}>
-            <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { marginBottom: spacing.sm }]}>7-Day Trend</Text>
-            <View style={styles.trendBars}>
-              {item.sevenDayTrend.map((price, idx) => {
-                const maxTrend = Math.max(...item.sevenDayTrend);
-                const minTrend = Math.min(...item.sevenDayTrend);
-                const range = maxTrend - minTrend || 1;
-                const height = ((price - minTrend) / range) * 40 + 10;
-                const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                const dayLabel = day[(idx) % 7];
 
-                return (
-                  <View key={idx} style={{ alignItems: 'center', gap: spacing.xs }}>
-                    <View
-                      style={[
-                        styles.trendBar,
-                        {
-                          height,
-                          backgroundColor: price >= item.today * 0.99 ? colors.accent : colors.primary,
-                        },
-                      ]}
-                    />
-                    <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{dayLabel}</Text>
-                  </View>
-                );
-              })}
-            </View>
-          </View>
 
           {/* AI Advice */}
           <View style={styles.aiAdviceBox}>
@@ -605,13 +580,22 @@ function FullAnalysisModal({ visible, onClose, crop, t }) {
 
 // ─── Compare Markets Modal ────────────────────────────────────
 function CompareMarketsModal({ visible, onClose, crop, t }) {
-  const allMarkets = [
-    { name: crop?.market, price: crop?.price, change: crop?.change },
-    { name: 'Bengaluru', price: Math.round(crop?.price * 0.98), change: -1.2 },
-    { name: 'Mumbai', price: Math.round(crop?.price * 1.05), change: 2.1 },
-    { name: 'Delhi', price: Math.round(crop?.price * 1.03), change: 1.5 },
-    { name: 'Chennai', price: Math.round(crop?.price * 0.95), change: -2.3 },
-  ];
+  // Use real API markets if available, otherwise generate mock data
+  const allMarkets = crop?.apiMarkets && crop.apiMarkets.length > 0 
+    ? crop.apiMarkets.map((m: any) => ({
+        name: m.name,
+        price: m.price,
+        trend: m.trend || 'up',
+        min: m.min,
+        max: m.max,
+      }))
+    : [
+        { name: crop?.market, price: crop?.price, trend: crop?.trend || 'up', min: crop?.minPrice, max: crop?.maxPrice },
+        { name: 'Bengaluru', price: Math.round(crop?.price * 0.98), trend: 'down', min: Math.round(crop?.price * 0.95), max: Math.round(crop?.price * 1.01) },
+        { name: 'Mumbai', price: Math.round(crop?.price * 1.05), trend: 'up', min: Math.round(crop?.price * 1.02), max: Math.round(crop?.price * 1.08) },
+        { name: 'Delhi', price: Math.round(crop?.price * 1.03), trend: 'up', min: Math.round(crop?.price * 1.00), max: Math.round(crop?.price * 1.06) },
+        { name: 'Chennai', price: Math.round(crop?.price * 0.95), trend: 'down', min: Math.round(crop?.price * 0.92), max: Math.round(crop?.price * 0.98) },
+      ];
 
   return (
     <Modal
@@ -633,24 +617,25 @@ function CompareMarketsModal({ visible, onClose, crop, t }) {
         <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
           <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { marginHorizontal: spacing.md, marginTop: spacing.md }]}>
             {crop?.crop} prices across different markets
+            {crop?.source && <Text style={[textStyle.caption(), { color: colors.textMuted }]}> (Source: {crop.source})</Text>}
           </Text>
 
           <View style={{ paddingHorizontal: spacing.md, marginTop: spacing.md, gap: spacing.md }}>
-            {allMarkets.map((market, idx) => (
+            {allMarkets.map((market: any, idx: number) => (
               <View
                 key={idx}
                 style={[
                   styles.marketComparisonCard,
-                  idx === 0 && { backgroundColor: colors.accent + '15', borderWidth: 2, borderColor: colors.accent },
+                  crop?.best_market === market.name && { backgroundColor: colors.accent + '15', borderWidth: 2, borderColor: colors.accent },
                 ]}
               >
                 <View style={{ flex: 1 }}>
                   <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { marginBottom: spacing.xs }]}>
                     {market.name}
-                    {idx === 0 && <Text style={{ color: colors.accent }}> (Current)</Text>}
+                    {crop?.best_market === market.name && <Text style={{ color: colors.accent }}> (BEST) 💰</Text>}
                   </Text>
                   <Text style={[textStyle.caption(), { color: colors.textMuted }]}>
-                    Updated today
+                    Range: ₹{market.min} - ₹{market.max}
                   </Text>
                 </View>
 
@@ -660,17 +645,17 @@ function CompareMarketsModal({ visible, onClose, crop, t }) {
                   </Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
                     <Feather
-                      name={market.change > 0 ? 'arrow-up' : 'arrow-down'}
+                      name={market.trend === 'up' ? 'arrow-up' : 'arrow-down'}
                       size={14}
-                      color={market.change > 0 ? colors.accent : '#E76F51'}
+                      color={market.trend === 'up' ? colors.accent : '#E76F51'}
                     />
                     <Text
                       style={[
                         textStyle.caption({ fontWeight: '600' }),
-                        { color: market.change > 0 ? colors.accent : '#E76F51' },
+                        { color: market.trend === 'up' ? colors.accent : '#E76F51' },
                       ]}
                     >
-                      {market.change > 0 ? '+' : ''}{market.change}%
+                      {market.trend === 'up' ? '📈' : '📉'} {market.trend}
                     </Text>
                   </View>
                 </View>
@@ -698,6 +683,55 @@ function CompareMarketsModal({ visible, onClose, crop, t }) {
 function SetAlertModal({ visible, onClose, crop, t }) {
   const [priceThreshold, setPriceThreshold] = React.useState(crop?.price?.toString() || '');
   const [alertType, setAlertType] = React.useState('above'); // above or below
+  const [loading, setLoading] = React.useState(false);
+  const [successMsg, setSuccessMsg] = React.useState('');
+  const [errorMsg, setErrorMsg] = React.useState('');
+
+  const handleSaveAlert = async () => {
+    setErrorMsg('');
+    setSuccessMsg('');
+
+    // Validation
+    if (!priceThreshold.trim()) {
+      setErrorMsg('Please enter a price threshold');
+      return;
+    }
+
+    const threshold = parseFloat(priceThreshold);
+    if (isNaN(threshold) || threshold <= 0) {
+      setErrorMsg('Enter a valid price amount');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const alertPayload = {
+        farmer_id: 'TN-CBE-9021', // TODO: Get from AuthContext
+        crop: crop?.crop,
+        location: crop?.market || 'Tamil Nadu',
+        alert_type: alertType,
+        price_threshold: threshold,
+        notification_methods: ['app'], // Push notification enabled
+      };
+
+      const response = await setPriceAlert(alertPayload);
+      
+      if (response.data?.status === 'active') {
+        setSuccessMsg(`✅ Alert set! You'll get notified when ${crop?.crop} goes ${alertType}`);
+        
+        // Auto-close after 1.5 seconds
+        setTimeout(() => {
+          setSuccessMsg('');
+          onClose();
+        }, 1500);
+      }
+    } catch (err) {
+      console.error('Alert API error:', err);
+      setErrorMsg(err.response?.data?.message || 'Failed to save alert. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Modal
@@ -707,7 +741,7 @@ function SetAlertModal({ visible, onClose, crop, t }) {
     >
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.modalHeader}>
-          <TouchableOpacity onPress={onClose} hitSlop={10}>
+          <TouchableOpacity onPress={onClose} hitSlop={10} disabled={loading}>
             <Feather name="arrow-left" size={24} color={colors.surface} />
           </TouchableOpacity>
           <Text style={textStyle.h2({ color: colors.surface })}>
@@ -722,6 +756,24 @@ function SetAlertModal({ visible, onClose, crop, t }) {
               {crop?.crop} - Current Price: ₹{crop?.price}
             </Text>
 
+            {/* Success Message */}
+            {successMsg ? (
+              <View style={{ backgroundColor: colors.primary + '15', padding: spacing.md, borderRadius: radius.md, marginBottom: spacing.md }}>
+                <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { color: colors.primary }]}>
+                  {successMsg}
+                </Text>
+              </View>
+            ) : null}
+
+            {/* Error Message */}
+            {errorMsg ? (
+              <View style={{ backgroundColor: '#E53935' + '15', padding: spacing.md, borderRadius: radius.md, marginBottom: spacing.md }}>
+                <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { color: '#E53935' }]}>
+                  {errorMsg}
+                </Text>
+              </View>
+            ) : null}
+
             {/* Alert Type Selection */}
             <View style={styles.analysisSection}>
               <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { marginBottom: spacing.md }]}>
@@ -735,6 +787,7 @@ function SetAlertModal({ visible, onClose, crop, t }) {
                     alertType === 'above' && { backgroundColor: colors.accent + '15', borderColor: colors.accent },
                   ]}
                   onPress={() => setAlertType('above')}
+                  disabled={loading}
                 >
                   <View
                     style={[
@@ -760,6 +813,7 @@ function SetAlertModal({ visible, onClose, crop, t }) {
                     alertType === 'below' && { backgroundColor: colors.accent + '15', borderColor: colors.accent },
                   ]}
                   onPress={() => setAlertType('below')}
+                  disabled={loading}
                 >
                   <View
                     style={[
@@ -861,12 +915,20 @@ function SetAlertModal({ visible, onClose, crop, t }) {
 
             {/* Save Button */}
             <TouchableOpacity
-              style={[styles.saveAlertBtn, { backgroundColor: colors.accent }]}
-              onPress={onClose}
+              style={[
+                styles.saveAlertBtn,
+                { backgroundColor: loading ? colors.textMuted : colors.accent }
+              ]}
+              onPress={handleSaveAlert}
+              disabled={loading}
             >
-              <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { color: colors.surface }]}>
-                💾 Save Alert
-              </Text>
+              {loading ? (
+                <ActivityIndicator color={colors.surface} />
+              ) : (
+                <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { color: colors.surface }]}>
+                  💾 Save Alert
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -888,6 +950,9 @@ export default function MarketAI({ navigation }) {
   const [sortMode, setSortMode] = useState(0);
   const [expandedCardId, setExpandedCardId] = useState(null);
   const [error, setError] = useState(null);
+  const [marketData, setMarketData] = useState(MARKET_DATA); // Real market data
+  const [apiErrors, setApiErrors] = useState({}); // Track which crops failed to fetch
+  const [fallbackMode, setFallbackMode] = useState(false); // Track if using mock data
 
   // Modal state
   const [activeModal, setActiveModal] = useState(null); // null | 'analysis' | 'compare' | 'alert'
@@ -901,12 +966,146 @@ export default function MarketAI({ navigation }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // Fetch real market data from API
+  useEffect(() => {
+    const fetchRealMarketData = async () => {
+      try {
+        const crops = MARKET_DATA.map(m => m.crop);
+        const updatedData = [...marketData];
+        const errors = {};
+
+        console.log('📡 Fetching market data for crops:', crops);
+        console.log('🔗 Using API endpoint: http://10.0.2.2:8000/api');
+
+        // Fetch data for each crop in parallel
+        let usingFallback = false;
+        await Promise.all(
+          crops.map(async (cropName) => {
+            try {
+              const response = await getMarketComparison(cropName);
+              if (response.data && response.data.markets && response.data.markets.length > 0) {
+                const cropIndex = updatedData.findIndex(m => m.crop === cropName);
+                if (cropIndex !== -1) {
+                  const apiData = response.data;
+                  // Track if using fallback
+                  if (apiData.fallback) {
+                    usingFallback = true;
+                  }
+                  // Update with real API data
+                  updatedData[cropIndex] = {
+                    ...updatedData[cropIndex],
+                    price: apiData.average_price || updatedData[cropIndex].price,
+                    today: apiData.average_price || updatedData[cropIndex].today,
+                    minPrice: Math.min(...apiData.markets.map(m => m.min)),
+                    maxPrice: Math.max(...apiData.markets.map(m => m.max)),
+                    modalPrice: apiData.average_price || updatedData[cropIndex].modalPrice,
+                    market: apiData.best_market || updatedData[cropIndex].market,
+                    apiMarkets: apiData.markets,
+                    source: apiData.source || 'api',
+                  };
+                }
+              }
+            } catch (err) {
+              errors[cropName] = err.message;
+              usingFallback = true;
+              console.warn(`❌ Failed to fetch ${cropName}:`, {
+                message: err.message,
+                code: err.code,
+                response: err.response?.status,
+                url: err.config?.url
+              });
+            }
+          })
+        );
+
+        setMarketData(updatedData);
+        setFallbackMode(usingFallback);
+        if (Object.keys(errors).length > 0) {
+          setApiErrors(errors);
+        }
+      } catch (err) {
+        console.error('❌ Market data fetch error:', {
+          message: err.message,
+          code: err.code,
+          response: err.response?.status,
+          details: 'Backend may not be running on 10.0.2.2:8000'
+        });
+        setError(err.message || 'Backend connection failed. Make sure backend is running on localhost:8000');
+      }
+    };
+
+    fetchRealMarketData();
+  }, []);
+
   const onRefresh = () => {
     setRefreshing(true);
     setError(null);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1500);
+    setApiErrors({});
+    
+    // Fetch fresh market data
+    const fetchRealMarketData = async () => {
+      try {
+        const crops = MARKET_DATA.map(m => m.crop);
+        const updatedData = [...marketData];
+        const errors = {};
+        let usingFallback = false;
+
+        await Promise.all(
+          crops.map(async (cropName) => {
+            try {
+              const response = await getMarketComparison(cropName);
+              if (response.data && response.data.markets && response.data.markets.length > 0) {
+                const cropIndex = updatedData.findIndex(m => m.crop === cropName);
+                if (cropIndex !== -1) {
+                  const apiData = response.data;
+                  if (apiData.fallback) {
+                    usingFallback = true;
+                  }
+                  updatedData[cropIndex] = {
+                    ...updatedData[cropIndex],
+                    price: apiData.average_price || updatedData[cropIndex].price,
+                    today: apiData.average_price || updatedData[cropIndex].today,
+                    minPrice: Math.min(...apiData.markets.map(m => m.min)),
+                    maxPrice: Math.max(...apiData.markets.map(m => m.max)),
+                    modalPrice: apiData.average_price || updatedData[cropIndex].modalPrice,
+                    market: apiData.best_market || updatedData[cropIndex].market,
+                    apiMarkets: apiData.markets,
+                    source: apiData.source || 'api',
+                  };
+                }
+              }
+            } catch (err) {
+              errors[cropName] = err.message;
+              usingFallback = true;
+              console.warn(`❌ Failed to refresh ${cropName}:`, {
+                message: err.message,
+                code: err.code,
+                response: err.response?.status,
+                url: err.config?.url
+              });
+            }
+          })
+        );
+
+        setMarketData(updatedData);
+        setFallbackMode(usingFallback);
+        if (Object.keys(errors).length > 0) {
+          setApiErrors(errors);
+        }
+      } catch (err) {
+        console.error('❌ Refresh error:', {
+          message: err.message,
+          code: err.code,
+          response: err.response?.status,
+          details: 'Backend may not be running on 10.0.2.2:8000'
+        });
+        setError(err.message || 'Failed to refresh market data. Backend connection failed.');
+      } finally {
+        setRefreshing(false);
+      }
+    };
+
+    fetchRealMarketData();
   };
 
   // Handle action button presses
@@ -923,7 +1122,7 @@ export default function MarketAI({ navigation }) {
 
   // Filter & Sort Logic
   const filteredAndSorted = useMemo(() => {
-    let result = [...MARKET_DATA];
+    let result = [...marketData];
 
     // Filter by search
     if (searchQuery.trim()) {
@@ -950,20 +1149,20 @@ export default function MarketAI({ navigation }) {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, sortMode]);
+  }, [searchQuery, selectedCategory, sortMode, marketData]);
 
   // Calculate Market Metrics
-  const prices = MARKET_DATA.map(m => m.price);
+  const prices = marketData.map(m => m.price);
   const avgPrice = Math.round(prices.reduce((a, b) => a + b) / prices.length);
-  const marketsTracked = new Set(MARKET_DATA.map(m => m.market)).size;
-  const trendDirection = MARKET_DATA.filter(m => m.trend === 'up').length > MARKET_DATA.length / 2 ? 'up' : 'down';
+  const marketsTracked = new Set(marketData.map(m => m.market)).size;
+  const trendDirection = marketData.filter(m => m.trend === 'up').length > marketData.length / 2 ? 'up' : 'down';
 
   // AI Signals Summary
   const signalCounts = {
-    Buy: MARKET_DATA.filter(m => m.aiSignal === 'Buy').length,
-    Sell: MARKET_DATA.filter(m => m.aiSignal === 'Sell').length,
-    Wait: MARKET_DATA.filter(m => m.aiSignal === 'Wait').length,
-    Avoid: MARKET_DATA.filter(m => m.aiSignal === 'Avoid').length,
+    Buy: marketData.filter(m => m.aiSignal === 'Buy').length,
+    Sell: marketData.filter(m => m.aiSignal === 'Sell').length,
+    Wait: marketData.filter(m => m.aiSignal === 'Wait').length,
+    Avoid: marketData.filter(m => m.aiSignal === 'Avoid').length,
   };
 
   if (loading) {
@@ -989,7 +1188,7 @@ export default function MarketAI({ navigation }) {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
 
-      {/* ── Header Top ──────────────────────────────────── */}
+      {/* ── Header Top (Fixed) ──────────────────────────────── */}
       <View style={styles.headerTop}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn} hitSlop={10}>
           <Feather name="arrow-left" size={22} color={colors.surface} />
@@ -1007,111 +1206,102 @@ export default function MarketAI({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* ── Search Bar & Sort ────────────────────────── */}
-      <View style={styles.searchSection}>
-        <SearchBar value={searchQuery} onChangeText={setSearchQuery} isLoading={loading} />
-        <TouchableOpacity
-          style={styles.sortButton}
-          onPress={() => setSortMode((prevMode) => (prevMode + 1) % SORT_MODES.length)}
-          hitSlop={10}
-        >
-          <MaterialCommunityIcons name="sort" size={18} color={colors.primary} />
-          <Text style={[textStyle.caption({ fontWeight: '600' }), { color: colors.primary }]}>
-            {SORT_MODES[sortMode]}
-          </Text>
-        </TouchableOpacity>
-      </View>
 
-      {/* ── Summary Metrics ──────────────────────────– */}
-      <View style={styles.metricsContainer}>
-        <StatBox
-          label={t?.avg_price_today || 'Avg Price'}
-          value={avgPrice}
-          unit="₹"
-          color={colors.primary}
-          style={{ flex: 1 }}
-        />
-        <StatBox
-          label={t?.markets_tracked || 'Markets'}
-          value={marketsTracked}
-          unit=""
-          color={colors.info}
-          style={{ flex: 1 }}
-        />
-        <View style={[styles.statBoxCustom, { backgroundColor: colors.accent + '15' }]}>
-          <View style={styles.statBoxContent}>
-            <Text style={[textStyle.caption(), { color: colors.textMuted, marginBottom: spacing.xs }]}>
-              {t?.price_trend || 'Trend'}
-            </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-              <Feather name={trendDirection === 'up' ? 'arrow-up' : 'arrow-down'} size={20} color={colors.accent} />
-              <Text style={[textStyle.h3(), { color: colors.accent }]}>
-                {trendDirection === 'up' ? '↑' : '↓'}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
 
-      {/* ── Category Chips ──────────────────────────── */}
-      <View style={styles.categorySection}>
-        <ChipFilterRow
-          options={CATEGORIES}
-          selected={selectedCategory}
-          onSelect={setSelectedCategory}
-          keyNames={CATEGORIES}
-        />
-      </View>
-
-      {/* ── AI Market Signals Panel ─────────────────– */}
-      <View style={[styles.signalsPanel, shadow.card]}>
-        <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { marginBottom: spacing.sm }]}>
-          {t?.market_signals || 'Market Signals'}
-        </Text>
-        <View style={styles.signalGrid}>
-          <View style={styles.signalItem}>
-            <View style={[styles.signalIndicator, { backgroundColor: colors.accent + '15' }]}>
-              <Text style={[textStyle.h3(), { color: colors.accent }]}>{signalCounts.Buy}</Text>
-            </View>
-            <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.buy || 'Buy'}</Text>
-          </View>
-          <View style={styles.signalItem}>
-            <View style={[styles.signalIndicator, { backgroundColor: '#FFC107' + '15' }]}>
-              <Text style={[textStyle.h3(), { color: '#FFC107' }]}>{signalCounts.Wait}</Text>
-            </View>
-            <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.wait || 'Wait'}</Text>
-          </View>
-          <View style={styles.signalItem}>
-            <View style={[styles.signalIndicator, { backgroundColor: '#E76F51' + '15' }]}>
-              <Text style={[textStyle.h3(), { color: '#E76F51' }]}>{signalCounts.Sell}</Text>
-            </View>
-            <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.sell || 'Sell'}</Text>
-          </View>
-          <View style={styles.signalItem}>
-            <View style={[styles.signalIndicator, { backgroundColor: '#C62828' + '15' }]}>
-              <Text style={[textStyle.h3(), { color: '#C62828' }]}>{signalCounts.Avoid}</Text>
-            </View>
-            <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.avoid || 'Avoid'}</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* ── Error Banner ────────────────────────────── */}
-      {error && (
-        <View style={[styles.errorBanner]}>
-          <MaterialCommunityIcons name="alert" size={18} color="#c62828" />
-          <Text style={[textStyle.bodySmall({ color: '#c62828' }), { flex: 1, marginLeft: spacing.sm }]}>
-            {error}
-          </Text>
-        </View>
-      )}
-
-      {/* ── Price Cards List ────────────────────────– */}
+      {/* ── Main Scrollable Content ─────────────────────────── */}
       <ScrollView
-        style={styles.scroll}
+        style={styles.mainScroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
+        {/* ── Search Bar & Sort ────────────────────────– */}
+        <View style={styles.searchSection}>
+          <SearchBar value={searchQuery} onChangeText={setSearchQuery} isLoading={loading} />
+          <TouchableOpacity
+            style={styles.sortButton}
+            onPress={() => setSortMode((prevMode) => (prevMode + 1) % SORT_MODES.length)}
+            hitSlop={10}
+          >
+            <MaterialCommunityIcons name="sort" size={18} color={colors.primary} />
+            <Text style={[textStyle.caption({ fontWeight: '600' }), { color: colors.primary }]}>
+              {SORT_MODES[sortMode]}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* ── Summary Metrics ──────────────────────────– */}
+        <View style={styles.metricsContainer}>
+          <StatBox
+            label={t?.avg_price_today || 'Avg Price'}
+            value={avgPrice}
+            unit="₹"
+            color={colors.primary}
+            style={{ flex: 1 }}
+          />
+          <StatBox
+            label={t?.markets_tracked || 'Markets'}
+            value={marketsTracked}
+            unit=""
+            color={colors.info}
+            style={{ flex: 1 }}
+          />
+
+        </View>
+
+        {/* ── Category Chips ──────────────────────────– */}
+        <View style={styles.categorySection}>
+          <ChipFilterRow
+            options={CATEGORIES}
+            selected={selectedCategory}
+            onSelect={setSelectedCategory}
+            keyNames={CATEGORIES}
+          />
+        </View>
+
+        {/* ── AI Market Signals Panel ──────────────────– */}
+        <View style={[styles.signalsPanel, shadow.card]}>
+          <Text style={[textStyle.bodySmall({ fontWeight: '600' }), { marginBottom: spacing.sm }]}>
+            {t?.market_signals || 'Market Signals'}
+          </Text>
+          <View style={styles.signalGrid}>
+            <View style={styles.signalItem}>
+              <View style={[styles.signalIndicator, { backgroundColor: colors.accent + '15' }]}>
+                <Text style={[textStyle.h3(), { color: colors.accent }]}>{signalCounts.Buy}</Text>
+              </View>
+              <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.buy || 'Buy'}</Text>
+            </View>
+            <View style={styles.signalItem}>
+              <View style={[styles.signalIndicator, { backgroundColor: '#FFC107' + '15' }]}>
+                <Text style={[textStyle.h3(), { color: '#FFC107' }]}>{signalCounts.Wait}</Text>
+              </View>
+              <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.wait || 'Wait'}</Text>
+            </View>
+            <View style={styles.signalItem}>
+              <View style={[styles.signalIndicator, { backgroundColor: '#E76F51' + '15' }]}>
+                <Text style={[textStyle.h3(), { color: '#E76F51' }]}>{signalCounts.Sell}</Text>
+              </View>
+              <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.sell || 'Sell'}</Text>
+            </View>
+            <View style={styles.signalItem}>
+              <View style={[styles.signalIndicator, { backgroundColor: '#C62828' + '15' }]}>
+                <Text style={[textStyle.h3(), { color: '#C62828' }]}>{signalCounts.Avoid}</Text>
+              </View>
+              <Text style={[textStyle.caption(), { color: colors.textMuted }]}>{t?.avoid || 'Avoid'}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* ── Error Banner ────────────────────────────– */}
+        {error && (
+          <View style={[styles.errorBanner]}>
+            <MaterialCommunityIcons name="alert" size={18} color="#c62828" />
+            <Text style={[textStyle.bodySmall({ color: '#c62828' }), { flex: 1, marginLeft: spacing.sm }]}>
+              {error}
+            </Text>
+          </View>
+        )}
+
+        {/* ── Price Cards List ────────────────────────– */}
         <View style={styles.cardsContainer}>
           {filteredAndSorted.length > 0 ? (
             filteredAndSorted.map(item => (
@@ -1119,9 +1309,17 @@ export default function MarketAI({ navigation }) {
                 key={item.id}
                 item={item}
                 isExpanded={expandedCardId === item.id}
-                onToggle={() =>
-                  setExpandedCardId(expandedCardId === item.id ? null : item.id)
-                }
+                onToggle={() => {
+                  // Smooth animation when expanding/collapsing
+                  LayoutAnimation.configureNext(
+                    LayoutAnimation.create(
+                      300,
+                      LayoutAnimation.Types.easeInEaseOut,
+                      LayoutAnimation.Properties.opacity
+                    )
+                  );
+                  setExpandedCardId(expandedCardId === item.id ? null : item.id);
+                }}
                 onActionPress={onActionPress}
                 t={t}
               />
@@ -1139,18 +1337,7 @@ export default function MarketAI({ navigation }) {
           )}
         </View>
 
-        {/* ── Voice Strip Hint ────────────────────── */}
-        <View style={[styles.voiceHint, shadow.card]}>
-          <MaterialCommunityIcons name="microphone" size={16} color={colors.info} />
-          <Text style={[textStyle.caption(), { color: colors.info, marginLeft: spacing.xs }]}>
-            {t?.voice_command_hint || 'Say "Show rice prices" to search'}
-          </Text>
-          <Text style={[textStyle.caption({ fontWeight: '600' }), { color: colors.info, marginLeft: 'auto' }]}>
-            {t?.lang_indicator || 'EN'}
-          </Text>
-        </View>
-
-        {/* ── Bottom Search Guidance UI ─────────────────── */}
+        {/* ── Bottom Search Guidance UI ────────────────────── */}
         <View style={styles.searchGuidanceBox}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
             <MaterialCommunityIcons name="lightbulb" size={20} color={colors.accent} />
@@ -1165,7 +1352,7 @@ export default function MarketAI({ navigation }) {
           </View>
         </View>
 
-        {/* ── Disclaimer ──────────────────────────── */}
+        {/* ── Disclaimer ──────────────────────────– */}
         <View style={styles.disclaimer}>
           <Text style={[textStyle.bodySmall({ color: colors.textMuted }), styles.disclaimerText]}>
             Prices are indicative and updated daily. Actual prices may vary by region and market. 
@@ -1210,7 +1397,7 @@ const styles = StyleSheet.create({
   },
   headerTop: {
     backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
@@ -1224,11 +1411,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  // Search & Sort
+  // Search & Sort (Wider layout)
   searchSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.md,
     gap: spacing.sm,
   },
@@ -1262,11 +1449,11 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
 
-  // Metrics
+  // Metrics (Wider cards)
   metricsContainer: {
     flexDirection: 'row',
-    gap: spacing.md,
-    paddingHorizontal: spacing.md,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
     marginVertical: spacing.md,
   },
   statBoxCustom: {
@@ -1275,6 +1462,11 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     padding: spacing.md,
     justifyContent: 'center',
+    shadowColor: colors.shadowColor || '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   statBoxContent: {
     alignItems: 'center',
@@ -1282,17 +1474,22 @@ const styles = StyleSheet.create({
 
   // Categories
   categorySection: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     marginBottom: spacing.md,
   },
 
-  // Signals Panel
+  // Signals Panel (Wider)
   signalsPanel: {
-    marginHorizontal: spacing.md,
+    marginHorizontal: spacing.sm,
     marginBottom: spacing.md,
     padding: spacing.md,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
+    shadowColor: colors.shadowColor || '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   signalGrid: {
     flexDirection: 'row',
@@ -1323,21 +1520,26 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xl,
   },
 
-  // Scroll & Cards
-  scroll: {
+  // Scroll & Cards (Wider layout with less padding)
+  mainScroll: {
     flex: 1,
   },
   cardsContainer: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.md,
     gap: spacing.md,
   },
 
-  // Price Card
+  // Price Card (Wider with animations)
   priceCard: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
     padding: spacing.md,
+    shadowColor: colors.shadowColor || '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
+    elevation: 3,
   },
   priceCardExpanded: {
     marginBottom: spacing.md,
@@ -1447,20 +1649,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: radius.md,
-  },
-
-  // Voice Hint
-  voiceHint: {
-    marginHorizontal: spacing.md,
-    marginVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    backgroundColor: colors.info + '10',
-    borderRadius: radius.md,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.info + '30',
   },
 
   // Error Banner
